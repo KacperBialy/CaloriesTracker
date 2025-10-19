@@ -1,94 +1,119 @@
-# 10x Astro Starter
+# CaloriesTracker
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+A web application designed to allow users to quickly and seamlessly track their daily calorie and macronutrient intake using voice commands.
+
+## Table of Contents
+
+- [Project Description](#project-description)
+- [Tech Stack](#tech-stack)
+- [Getting Started Locally](#getting-started-locally)
+- [Available Scripts](#available-scripts)
+- [Project Scope](#project-scope)
+- [Project Status](#project-status)
+- [License](#license)
+
+## Project Description
+
+CaloriesTracker addresses the common problem of time-consuming and inconvenient manual data entry for tracking daily food intake. This process can be demotivating and lead to inconsistent diet monitoring.
+
+Our solution offers a "hands-free" approach. By using natural language—for example, saying, "I ate 200 grams of chicken, 100 grams of mozzarella, and 30 grams of butter"—the system automatically processes the command, calculates nutritional values, and updates the daily summary. This eliminates the need for manual interaction with a phone or computer during meals, making diet tracking simple and efficient.
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+The project is built with a modern tech stack focused on performance and developer experience:
 
-## Prerequisites
+- **Framework**: [Astro](https://astro.build/) v5.5.5
+- **UI Library**: [React](https://react.dev/) v19.0.0
+- **Language**: [TypeScript](https://www.typescriptlang.org/) v5
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) v4.0.17
+- **UI Components**: [Shadcn/ui](https://ui.shadcn.com/)
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+## Getting Started Locally
 
-## Getting Started
+To run the project locally, please follow these steps.
 
-1. Clone the repository:
+### Prerequisites
 
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
+- Node.js `22.14.0` (as specified in the `.nvmrc` file)
+- npm (or your preferred package manager)
 
-2. Install dependencies:
+### Installation
 
-```bash
-npm install
-```
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/your-username/CaloriesTracker.git
+    cd CaloriesTracker
+    ```
 
-3. Run the development server:
+2.  **Install dependencies:**
+    ```sh
+    npm install
+    ```
 
-```bash
-npm run dev
-```
+3.  **Set up environment variables:**
+    Create a `.env` file in the root of the project and add the necessary environment variables. For example:
+    ```env
+    # Supabase
+    PUBLIC_SUPABASE_URL="your-supabase-url"
+    PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
+    ```
 
-4. Build for production:
-
-```bash
-npm run build
-```
+4.  **Run the development server:**
+    ```sh
+    npm run dev
+    ```
+    The application will be available at `http://localhost:4321`.
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+The following scripts are available in the `package.json`:
 
-## Project Structure
+| Script       | Description                                      |
+| ------------ | ------------------------------------------------ |
+| `npm run dev`    | Starts the development server.                   |
+| `npm run build`  | Builds the application for production.           |
+| `npm run preview`| Previews the production build locally.           |
+| `npm run lint`   | Lints the code using ESLint.                     |
+| `npm run lint:fix`| Lints the code and automatically fixes issues.   |
+| `npm run format` | Formats the code using Prettier.                 |
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+## Project Scope
 
-## AI Development Support
+The scope of the project is defined for the Minimum Viable Product (MVP).
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+### In Scope for MVP
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+-   **Authentication**: User login and registration exclusively through Google OAuth2.
+-   **Data Entry**: Processing meal queries sent to the API in text form.
+-   **Data Retrieval**: Automatic retrieval of nutritional data for recognized products.
+-   **Database**: Saving each product as a separate entry associated with the user.
+-   **Data Visualization**:
+    -   Displaying consumption data for the current day only.
+    -   Visualizing the sum of consumed calories and macronutrients.
+    -   Displaying a chronological list of consumed products.
+-   **User Settings**: Ability to set and update a daily caloric goal.
+-   **Data Management**: Ability to delete an incorrectly added product.
 
-### Cursor IDE
+### Out of Scope for MVP
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
+-   Manual entry or editing of products from the web interface.
+-   Consumption history from previous days.
+-   Notifications (e.g., about exceeding the caloric goal).
+-   Calorie counting based on meal photos.
+-   A built-in speech recognition mechanism.
+-   Saving and creating custom recipes.
+-   Nutritional suggestions and diet plans.
+-   Grouping products into meals (e.g., breakfast, lunch).
 
-### GitHub Copilot
+## Project Status
 
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
+The project is currently in the **development phase of the MVP**.
 
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+The success of the MVP will be measured by the following criteria:
+-   **End-to-End Functional Correctness**: The entire flow, from a voice command to data visualization, operates flawlessly.
+-   **Product Recognition Accuracy**: The system achieves at least 95% accuracy in identifying products and their weights from text commands.
+-   **Stability and Reliability**: The application and API operate without critical errors during normal use.
 
 ## License
 
-MIT
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
