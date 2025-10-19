@@ -5,6 +5,7 @@
 CaloriesTracker is a web application designed to allow users to quickly and seamlessly track their daily calorie and macronutrient intake. The main goal of the project is to minimize interaction with the interface by using voice commands, which will be processed by external services (e.g., ChatGPT integrated via an MCP server) and sent to a dedicated API.
 
 The application will consist of two main components:
+
 - A backend in the form of an API (ASP.NET Web API), responsible for processing queries, analyzing text using language models (LLM), fetching nutritional data, saving it to a database, and providing it to the frontend.
 - A web application (Angular with Tailwind CSS), which will visualize data for the current day, allow management of the caloric goal, and handle user authentication.
 
@@ -19,6 +20,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 ## 3. Functional Requirements
 
 ### 3.1. API (Backend - ASP.NET)
+
 - F-001: Must provide a secure endpoint that accepts POST requests in JSON format, containing a text query about a meal.
 - F-002: Must integrate with an LLM to extract product names and their weights from the received text.
 - F-003: Must use an LLM to retrieve nutritional information (calories, proteins, fats, carbohydrates) for the recognized products.
@@ -29,6 +31,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 - F-008: Must integrate with an authentication system (Supabase) to verify the user's identity with every request.
 
 ### 3.2. Web Application (Frontend - Angular)
+
 - F-009: Must allow users to log in and register exclusively using their Google account (Google OAuth2), utilizing integration with Supabase.
 - F-010: Must present a main dashboard that displays consumption data for the current day only.
 - F-011: Must visualize the sum of consumed calories in relation to the daily goal set by the user (e.g., using a progress bar).
@@ -40,6 +43,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 ## 4. Product Boundaries
 
 ### 4.1. In Scope for MVP
+
 - User authentication exclusively through Google OAuth2.
 - Processing meal queries sent to the API in text form.
 - Automatic retrieval of nutritional data.
@@ -49,6 +53,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 - Ability to delete an incorrectly added product.
 
 ### 4.2. Out of Scope for MVP
+
 - Manual entry or editing of products from the web interface.
 - Consumption history from previous days.
 - Notifications (e.g., about exceeding the caloric goal).
@@ -61,6 +66,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 ## 5. User Stories
 
 ### US-001
+
 - Title: Authentication with a Google account
 - Description: As a user, I want to be able to log into the application using my Google account to securely access my personalized data.
 - Acceptance Criteria:
@@ -70,6 +76,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   4. In case of a login error, an appropriate message is displayed.
 
 ### US-002
+
 - Title: Setting a daily caloric goal
 - Description: As a user, I want to be able to set my daily caloric goal so I can track my progress towards it on the main dashboard.
 - Acceptance Criteria:
@@ -80,6 +87,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   5. The system validates that the entered value is a positive integer.
 
 ### US-003
+
 - Title: Processing a text command via the API
 - Description: As the system, I want to receive a text command from an external source (e.g., a voice assistant) to process it, identify products and their weights, and then save them to the database.
 - Acceptance Criteria:
@@ -90,6 +98,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   5. The API returns a success response containing a summary of the added products.
 
 ### US-004
+
 - Title: Displaying the daily summary
 - Description: As a user, I want to see a summary of my daily calorie and macronutrient intake on the main dashboard.
 - Acceptance Criteria:
@@ -99,6 +108,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   4. All values on the dashboard update automatically after a new product is added.
 
 ### US-005
+
 - Title: Viewing the list of consumed products
 - Description: As a user, I want to see a list of all products consumed during the day so I can review and verify them.
 - Acceptance Criteria:
@@ -107,6 +117,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   3. Each item on the list includes the product name, its weight, calorie count, and macronutrients.
 
 ### US-006
+
 - Title: Deleting an incorrectly added product
 - Description: As a user, I want to be able to delete a single product from my daily list if it was added by mistake.
 - Acceptance Criteria:
@@ -115,6 +126,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   3. After deleting a product, the daily summary of calories and macronutrients is immediately recalculated.
 
 ### US-007
+
 - Title: Handling a partially unrecognized command
 - Description: As the system, when I receive a command containing both recognizable and unrecognizable products, I want to save the correct ones and report the errors.
 - Acceptance Criteria:
@@ -124,6 +136,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   4. The web application does not crash, and the data for the chicken is displayed correctly.
 
 ### US-008
+
 - Title: Logging out of the application
 - Description: As a user, I want to be able to log out of the application to end my session and secure access to my data.
 - Acceptance Criteria:

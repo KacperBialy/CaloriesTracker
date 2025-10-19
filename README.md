@@ -40,18 +40,21 @@ To run the project locally, please follow these steps.
 ### Installation
 
 1.  **Clone the repository:**
+
     ```sh
     git clone https://github.com/your-username/CaloriesTracker.git
     cd CaloriesTracker
     ```
 
 2.  **Install dependencies:**
+
     ```sh
     npm install
     ```
 
 3.  **Set up environment variables:**
     Create a `.env` file in the root of the project and add the necessary environment variables. For example:
+
     ```env
     # Supabase
     PUBLIC_SUPABASE_URL="your-supabase-url"
@@ -68,14 +71,14 @@ To run the project locally, please follow these steps.
 
 The following scripts are available in the `package.json`:
 
-| Script       | Description                                      |
-| ------------ | ------------------------------------------------ |
-| `npm run dev`    | Starts the development server.                   |
-| `npm run build`  | Builds the application for production.           |
-| `npm run preview`| Previews the production build locally.           |
-| `npm run lint`   | Lints the code using ESLint.                     |
-| `npm run lint:fix`| Lints the code and automatically fixes issues.   |
-| `npm run format` | Formats the code using Prettier.                 |
+| Script             | Description                                    |
+| ------------------ | ---------------------------------------------- |
+| `npm run dev`      | Starts the development server.                 |
+| `npm run build`    | Builds the application for production.         |
+| `npm run preview`  | Previews the production build locally.         |
+| `npm run lint`     | Lints the code using ESLint.                   |
+| `npm run lint:fix` | Lints the code and automatically fixes issues. |
+| `npm run format`   | Formats the code using Prettier.               |
 
 ## Project Scope
 
@@ -83,36 +86,37 @@ The scope of the project is defined for the Minimum Viable Product (MVP).
 
 ### In Scope for MVP
 
--   **Authentication**: User login and registration exclusively through Google OAuth2.
--   **Data Entry**: Processing meal queries sent to the API in text form.
--   **Data Retrieval**: Automatic retrieval of nutritional data for recognized products.
--   **Database**: Saving each product as a separate entry associated with the user.
--   **Data Visualization**:
-    -   Displaying consumption data for the current day only.
-    -   Visualizing the sum of consumed calories and macronutrients.
-    -   Displaying a chronological list of consumed products.
--   **User Settings**: Ability to set and update a daily caloric goal.
--   **Data Management**: Ability to delete an incorrectly added product.
+- **Authentication**: User login and registration exclusively through Google OAuth2.
+- **Data Entry**: Processing meal queries sent to the API in text form.
+- **Data Retrieval**: Automatic retrieval of nutritional data for recognized products.
+- **Database**: Saving each product as a separate entry associated with the user.
+- **Data Visualization**:
+  - Displaying consumption data for the current day only.
+  - Visualizing the sum of consumed calories and macronutrients.
+  - Displaying a chronological list of consumed products.
+- **User Settings**: Ability to set and update a daily caloric goal.
+- **Data Management**: Ability to delete an incorrectly added product.
 
 ### Out of Scope for MVP
 
--   Manual entry or editing of products from the web interface.
--   Consumption history from previous days.
--   Notifications (e.g., about exceeding the caloric goal).
--   Calorie counting based on meal photos.
--   A built-in speech recognition mechanism.
--   Saving and creating custom recipes.
--   Nutritional suggestions and diet plans.
--   Grouping products into meals (e.g., breakfast, lunch).
+- Manual entry or editing of products from the web interface.
+- Consumption history from previous days.
+- Notifications (e.g., about exceeding the caloric goal).
+- Calorie counting based on meal photos.
+- A built-in speech recognition mechanism.
+- Saving and creating custom recipes.
+- Nutritional suggestions and diet plans.
+- Grouping products into meals (e.g., breakfast, lunch).
 
 ## Project Status
 
 The project is currently in the **development phase of the MVP**.
 
 The success of the MVP will be measured by the following criteria:
--   **End-to-End Functional Correctness**: The entire flow, from a voice command to data visualization, operates flawlessly.
--   **Product Recognition Accuracy**: The system achieves at least 95% accuracy in identifying products and their weights from text commands.
--   **Stability and Reliability**: The application and API operate without critical errors during normal use.
+
+- **End-to-End Functional Correctness**: The entire flow, from a voice command to data visualization, operates flawlessly.
+- **Product Recognition Accuracy**: The system achieves at least 95% accuracy in identifying products and their weights from text commands.
+- **Stability and Reliability**: The application and API operate without critical errors during normal use.
 
 ## License
 
