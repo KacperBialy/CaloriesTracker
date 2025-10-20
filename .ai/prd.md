@@ -6,8 +6,8 @@ CaloriesTracker is a web application designed to allow users to quickly and seam
 
 The application will consist of two main components:
 
-- A backend in the form of an API (ASP.NET Web API), responsible for processing queries, analyzing text using language models (LLM), fetching nutritional data, saving it to a database, and providing it to the frontend.
-- A web application (Angular with Tailwind CSS), which will visualize data for the current day, allow management of the caloric goal, and handle user authentication.
+- A backend in the form of an API, responsible for processing queries, analyzing text using language models (LLM), fetching nutritional data, saving it to a database, and providing it to the frontend.
+- A web application (React with Tailwind CSS), which will visualize data for the current day, allow management of the caloric goal, and handle user authentication.
 
 The goal of the MVP is to deliver a fully functional flow, from a voice command to data visualization, focusing on simplicity and usability for a single, primary use case.
 
@@ -19,7 +19,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 
 ## 3. Functional Requirements
 
-### 3.1. API (Backend - ASP.NET)
+### 3.1. API (Backend - Astro + Supabase)
 
 - F-001: Must provide a secure endpoint that accepts POST requests in JSON format, containing a text query about a meal.
 - F-002: Must integrate with an LLM to extract product names and their weights from the received text.
@@ -30,7 +30,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 - F-007: Must handle partial failures, returning in the response both a list of successfully processed products and a list of unrecognized queries.
 - F-008: Must integrate with an authentication system (Supabase) to verify the user's identity with every request.
 
-### 3.2. Web Application (Frontend - Angular)
+### 3.2. Web Application (Frontend - Astro + React + Tailwind)
 
 - F-009: Must allow users to log in and register exclusively using their Google account (Google OAuth2), utilizing integration with Supabase.
 - F-010: Must present a main dashboard that displays consumption data for the current day only.

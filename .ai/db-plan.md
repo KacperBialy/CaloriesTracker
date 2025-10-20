@@ -23,33 +23,27 @@ This table is managed by Supabase Auth.
 
 ### 1.3 products
 
-| column          | type                 | constraints                            |
-| --------------- | -------------------- | -------------------------------------- |
-| id              | uuid                 | PRIMARY KEY, default gen_random_uuid() |
-| name            | text                 | NOT NULL, UNIQUE                       |
-| nutrition_basis | nutrition_basis_enum | NOT NULL                               |
-| calories        | numeric(10,2)        | NOT NULL, CHECK (calories >= 0)        |
-| protein         | numeric(10,2)        | NOT NULL, CHECK (protein >= 0)         |
-| fat             | numeric(10,2)        | NOT NULL, CHECK (fat >= 0)             |
-| carbs           | numeric(10,2)        | NOT NULL, CHECK (carbs >= 0)           |
+- id: uuid, PRIMARY KEY, default gen_random_uuid()
+- name: text, NOT NULL, UNIQUE
+- nutrition_basis: nutrition_basis_enum, NOT NULL
+- calories: numeric(10,2), NOT NULL, CHECK (calories >= 0)
+- protein: numeric(10,2), NOT NULL, CHECK (protein >= 0)
+- fat: numeric(10,2), NOT NULL, CHECK (fat >= 0)
+- carbs: numeric(10,2), NOT NULL, CHECK (carbs >= 0)
 
 ### 1.4 entries
 
-| column      | type          | constraints                            |
-| ----------- | ------------- | -------------------------------------- |
-| id          | uuid          | PRIMARY KEY, default gen_random_uuid() |
-| user_id     | uuid          | NOT NULL                               |
-| product_id  | uuid          | NOT NULL                               |
-| quantity    | numeric(10,2) | NOT NULL, CHECK (quantity > 0)         |
-| consumed_at | date          | NOT NULL, default CURRENT_DATE         |
+- id: uuid, PRIMARY KEY, default gen_random_uuid()
+- user_id: uuid, NOT NULL
+- product_id: uuid, NOT NULL
+- quantity: numeric(10,2), NOT NULL, CHECK (quantity > 0)
+- consumed_at: date, NOT NULL, default CURRENT_DATE
 
-### 1.4 user_goals
+### 1.5 user_goals
 
-| column             | type    | constraints                              |
-| ------------------ | ------- | ---------------------------------------- |
-| id                 | uuid    | PRIMARY KEY, default gen_random_uuid()   |
-| user_id            | uuid    | NOT NULL, UNIQUE                         |
-| daily_calorie_goal | integer | NOT NULL, CHECK (daily_calorie_goal > 0) |
+- id: uuid, PRIMARY KEY, default gen_random_uuid()
+- user_id: uuid, NOT NULL, UNIQUE
+- daily_calorie_goal: integer, NOT NULL, CHECK (daily_calorie_goal > 0)
 
 ---
 
