@@ -112,6 +112,25 @@ export type DailySummaryDto = NutritionDto & {
   goal: number | null;
 };
 
+// 14. View model for dashboard summary display
+export interface SummaryVM {
+  calories: number;
+  protein: number;
+  fat: number;
+  carbs: number;
+  goal: number | null;
+  /** Progress percentage (0–100) or undefined if goal null */
+  progress?: number;
+}
+
+// 15. Custom hook return type for summary fetching
+export interface UseSummaryHookResult {
+  data?: SummaryVM;
+  loading: boolean;
+  error?: Error;
+  refetch: () => void;
+}
+
 // ============================================================================
 // Zod Validation Schemas
 // ============================================================================

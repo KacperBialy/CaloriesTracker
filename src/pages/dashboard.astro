@@ -1,0 +1,14 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { DashboardPage } from "../components/dashboard/DashboardPage";
+---
+
+<Layout title="Dashboard - Calories Tracker">
+  <DashboardPage client:load />
+</Layout>
+
+<style>
+  :global(body) {
+    background-color: rgb(249, 250, 251);
+  }
+</style>
