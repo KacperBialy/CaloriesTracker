@@ -1,6 +1,9 @@
 import React from "react";
 import { useSummary } from "../../lib/hooks/useSummary";
 import { SummaryPanel } from "./SummaryPanel";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface RefreshButtonProps {
   disabled: boolean;
@@ -9,13 +12,9 @@ interface RefreshButtonProps {
 
 function RefreshButton({ disabled, onClick }: RefreshButtonProps): React.ReactNode {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-    >
+    <Button onClick={onClick} disabled={disabled} size="default">
       Refresh
-    </button>
+    </Button>
   );
 }
 
@@ -26,16 +25,19 @@ interface ErrorAlertProps {
 
 function ErrorAlert({ message, onRetry }: ErrorAlertProps): React.ReactNode {
   return (
-    <div className="w-full max-w-2xl mx-auto bg-red-50 border border-red-200 rounded-lg p-4">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-semibold text-red-800">Error loading summary</p>
-          <p className="text-sm text-red-700 mt-1">{message}</p>
+    <div className="w-full max-w-2xl mx-auto">
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex-1">
+            <AlertTitle>Error loading summary</AlertTitle>
+            <AlertDescription>{message}</AlertDescription>
+          </div>
+          <Button onClick={onRetry} variant="outline" size="sm" className="ml-4 flex-shrink-0">
+            Retry
+          </Button>
         </div>
-        <button onClick={onRetry} className="ml-4 text-sm font-medium text-red-600 hover:text-red-700 underline">
-          Retry
-        </button>
-      </div>
+      </Alert>
     </div>
   );
 }
@@ -43,7 +45,7 @@ function ErrorAlert({ message, onRetry }: ErrorAlertProps): React.ReactNode {
 function Spinner(): React.ReactNode {
   return (
     <div className="w-full max-w-2xl mx-auto flex justify-center items-center py-12">
-      <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-blue-600" />
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary/20 border-t-primary" />
     </div>
   );
 }
