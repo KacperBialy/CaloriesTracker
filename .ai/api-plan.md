@@ -32,11 +32,12 @@
 ### 2.2 Command Processing
 
 **POST** `/api/commands/process`
+
 - Description: Parse a free-text meal query, extract products & quantities, fetch nutritional info (cache first, fallback to LLM), save entries
 - Request Payload:
   ```json
   {
-    "text": "string"   // e.g., "chicken 200g and rice 100g"
+    "text": "string" // e.g., "chicken 200g and rice 100g"
   }
   ```
 - Response Payload:
@@ -63,6 +64,7 @@
 ### 2.3 Entries Management
 
 **GET** `/api/entries`
+
 - Description: Retrieve a paginated list of user entries
 - Query Parameters:
   - `date` (optional, default = today, format `YYYY-MM-DD`)
@@ -89,6 +91,7 @@
 - Error Codes: `400`, `401`
 
 **DELETE** `/api/entries/{entryId}`
+
 - Description: Delete a single entry
 - Path Parameters: `entryId` (UUID)
 - Success Codes: `204 No Content`
@@ -97,6 +100,7 @@
 ### 2.4 Products
 
 **GET** `/api/products`
+
 - Description: Search or list products (for autocomplete and caching verification)
 - Query Parameters: `name` (optional substring match)
 - Response Payload:
@@ -106,6 +110,7 @@
 - Success Codes: `200 OK`
 
 **GET** `/api/products/{productId}`
+
 - Description: Retrieve a single product by ID
 - Path Parameters: `productId` (UUID)
 - Success Codes: `200 OK`, `404 Not Found`
@@ -113,6 +118,7 @@
 ### 2.5 User Goals
 
 **GET** `/api/user-goals`
+
 - Description: Retrieve current user's daily calorie goal
 - Response Payload:
   ```json
@@ -121,6 +127,7 @@
 - Success Codes: `200 OK`, `404 Not Found` (no goal set)
 
 **PUT** `/api/user-goals`
+
 - Description: Create or update user's daily calorie goal
 - Request Payload:
   ```json
@@ -132,6 +139,7 @@
 ### 2.6 Daily Summary
 
 **GET** `/api/summary`
+
 - Description: Retrieve aggregated calories and macros for a given date
 - Query Parameters: `date` (optional, default = today)
 - Response Payload:

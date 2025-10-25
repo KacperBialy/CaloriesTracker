@@ -1,5 +1,6 @@
 import type { Database } from "./db/database.types";
 import { z } from "zod";
+import type { ZodType } from "zod";
 
 // Aliases for base database types
 export type EntryEntity = Database["public"]["Tables"]["entries"]["Row"];
@@ -148,3 +149,43 @@ export const ProcessMealCommandSchema = z.object({
 });
 
 export type ProcessMealCommandType = z.infer<typeof ProcessMealCommandSchema>;
+
+// ============================================================================
+// OpenRouter Service Types
+// ============================================================================
+
+/**
+ * Parameters for calling the OpenRouter chat completions API
+ * @template T - The expected type of the parsed content when using jsonSchema
+ */
+export interface ChatCompletionParams<T = unknown> {
+  /** The user message to send to the LLM */
+  userMessage: string;
+  /** Optional system message to set the behavior of the LLM */
+  systemMessage?: string;
+  /** Model to use (overrides the default model) */
+  model?: string;
+  /** Temperature for response (0-2), controls randomness */
+  temperature?: number;
+  /** Maximum tokens in the response */
+  maxTokens?: number;
+  /** Zod schema or raw JSON Schema for structured output validation */
+  jsonSchema?: ZodType<T>;
+}
+
+/**
+ * Response from a successful OpenRouter chat completion API call
+ * @template T - The type of the parsed content
+ */
+export interface ChatCompletionResponse<T> {
+  /** The parsed content (string or typed object if jsonSchema was provided) */
+  content: T;
+  /** The model that generated the response */
+  model: string;
+  /** Token usage statistics */
+  usage: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+}

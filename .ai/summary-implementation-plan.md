@@ -1,9 +1,11 @@
 # API Endpoint Implementation Plan: GET /api/summary
 
 ## 1. Endpoint Overview
+
 Retrieve the user’s aggregated daily nutrition summary, including total calories, protein, fat, carbs, and the user’s daily calorie goal for a specific date (defaults to today). The endpoint enforces authentication and leverages Supabase RLS policies.
 
 ## 2. Request Details
+
 - HTTP Method: GET
 - URL: `/api/summary`
 - Query Parameters:
@@ -12,6 +14,7 @@ Retrieve the user’s aggregated daily nutrition summary, including total calori
 - Request Body: None
 
 ## 3. Used Types
+
 - **GetSummaryQuery** (new): Zod schema for query validation.
 - **DailySummaryDto** (from `src/types.ts`):
   ```ts
@@ -25,12 +28,14 @@ Retrieve the user’s aggregated daily nutrition summary, including total calori
   ```
 
 ## 4. Response Details
+
 - **200 OK**: Returns JSON conforming to `DailySummaryDto`.
 - **400 Bad Request**: Invalid `date` format.
 - **401 Unauthorized**: Missing or invalid authentication.
 - **500 Internal Server Error**: Unexpected failures.
 
 ## 5. Data Flow
+
 1. **Authentication**: Use DEFAULT_USER_ID from supabase.client.ts at the moment.
 2. **Validate Input**: Use Zod to parse and validate `date`.
 3. **Service Call**: Invoke `SummaryService.getDailySummary(userId, date)`:
@@ -54,21 +59,24 @@ Retrieve the user’s aggregated daily nutrition summary, including total calori
 4. **Return Response**: Serialize service result to JSON.
 
 ## 6. Error Handling
-| Scenario                   | Response Code | Handling                                         |
-|----------------------------|---------------|--------------------------------------------------|
-| Invalid `date` format      | 400           | Return 400, validation error details             |
-| No entries found           | 200           | Return zeros for macros and `goal` as null if unset |
-| DB query failure           | 500           | Log error, return 500 with generic message       |
+
+| Scenario              | Response Code | Handling                                            |
+| --------------------- | ------------- | --------------------------------------------------- |
+| Invalid `date` format | 400           | Return 400, validation error details                |
+| No entries found      | 200           | Return zeros for macros and `goal` as null if unset |
+| DB query failure      | 500           | Log error, return 500 with generic message          |
 
 ## 8. Performance Considerations
+
 - Single aggregated SQL query reduces round trips.
 
 ## 9. Implementation Steps
+
 1. **Define Zod Schema**: In the API route, create `GetSummaryQuerySchema`:
    ```ts
    const GetSummaryQuerySchema = z.object({
      date: z.string().optional().refine(isValidIsoDate, {
-       message: 'Invalid date format',
+       message: "Invalid date format",
      }),
    });
    ```

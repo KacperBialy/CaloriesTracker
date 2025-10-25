@@ -7,6 +7,7 @@ The MVP consists of a single authenticated dashboard screen rendered via Astro. 
 ## 2. View List
 
 ### 2.1. Login View
+
 - Path: `/`
 - Main purpose: Authenticate users via Google OAuth2
 - Key information: “Sign in with Google” button, app logo, brief description
@@ -15,6 +16,7 @@ The MVP consists of a single authenticated dashboard screen rendered via Astro. 
 - Considerations: Prevent unauthorized access; redirect authenticated users to `/dashboard`.
 
 ### 2.2. Dashboard View
+
 - Path: `/dashboard`
 - Main purpose: Display daily summary of calories and macronutrients
 - Key information:
@@ -34,6 +36,7 @@ The MVP consists of a single authenticated dashboard screen rendered via Astro. 
   - Show spinner until data arrives; ensure keyboard focus management
 
 ### 2.3. Settings Modal
+
 - Triggered from Dashboard header icon
 - Main purpose: Create or update daily calorie goal via PUT `/api/user-goals`
 - Key information:
@@ -58,7 +61,7 @@ The MVP consists of a single authenticated dashboard screen rendered via Astro. 
    - While loading: show spinner in panel.
    - On success: render progress bar and macros.
    - On failure: render inline alert with error text and “Retry” button.
-4. User clicks Refresh → re-fetches summary (repeat spinner or alert). 
+4. User clicks Refresh → re-fetches summary (repeat spinner or alert).
 5. User clicks settings icon → opens modal.
 6. User enters new calorie goal and clicks Save.
    - If input invalid: show validation error below input.
@@ -94,4 +97,4 @@ The MVP consists of a single authenticated dashboard screen rendered via Astro. 
 
 ---
 
-*This architecture aligns each user story from the PRD with UI elements and ensures a consistent, accessible, and secure user experience.*
+_This architecture aligns each user story from the PRD with UI elements and ensures a consistent, accessible, and secure user experience._

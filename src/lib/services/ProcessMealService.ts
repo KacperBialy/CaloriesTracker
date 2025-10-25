@@ -1,6 +1,7 @@
+import { z } from "zod";
 import type { EntryDto, ErrorDto, NutritionDto, ProductEntity, ProductInsert } from "../../types";
 import { supabaseClient } from "../../db/supabase.client";
-import { LLMClient } from "../llm-client";
+import { OpenRouterService, ResponseParsingError } from "./OpenRouterService";
 
 /**
  * Represents a single parsed meal item (output from LLM parsing)
@@ -11,17 +12,44 @@ interface ParsedMealItem {
 }
 
 /**
+ * Zod schema for meal parsing response from LLM
+ */
+const ParsedMealSchema = z.object({
+  items: z.array(
+    z.object({
+      name: z.string().describe("Name of the food item"),
+      quantity: z.number().describe("Quantity in the unit specified"),
+    })
+  ),
+});
+
+type ParsedMealResponse = z.infer<typeof ParsedMealSchema>;
+
+/**
+ * Zod schema for nutrition data response from LLM
+ */
+const NutritionDataSchema = z.object({
+  nutritionBasis: z.enum(["100g", "100ml", "unit"]).describe("Basis for nutrition values"),
+  calories: z.number().describe("Calories per basis"),
+  protein: z.number().describe("Protein in grams"),
+  fat: z.number().describe("Fat in grams"),
+  carbs: z.number().describe("Carbohydrates in grams"),
+});
+
+type NutritionDataResponse = z.infer<typeof NutritionDataSchema>;
+
+/**
  * ProcessMealService handles the orchestration of:
- * 1. Parsing free-text meal descriptions using LLM
+ * 1. Parsing free-text meal descriptions using OpenRouter LLM
  * 2. Looking up or creating products in the database
  * 3. Inserting consumption entries for each product
  * 4. Aggregating successes and errors for the response
  */
 export class ProcessMealService {
-  private llmClient: LLMClient;
+  private openRouterService: OpenRouterService;
 
   constructor() {
-    this.llmClient = new LLMClient();
+    this.openRouterService = new OpenRouterService();
   }
 
   /**
@@ -103,15 +131,42 @@ export class ProcessMealService {
   }
 
   /**
-   * Parses free-text meal description into structured items using LLM
+   * Parses free-text meal description into structured items using OpenRouter LLM
    *
    * @param text - Raw meal description
    * @returns Array of parsed meal items with name and quantity
    * @throws Error if LLM parsing fails
    */
   private async parseText(text: string): Promise<ParsedMealItem[]> {
-    const parsed = await this.llmClient.parseMealDescription(text);
-    return parsed;
+    try {
+      const result = await this.openRouterService.chatCompletion<ParsedMealResponse>({
+        userMessage: `Parse the following meal description and extract food items with quantities. Respond with ONLY valid JSON (no markdown, no code blocks):\n\n"${text}"`,
+        systemMessage: `You are an expert nutrition data parser. Analyze meal descriptions and extract individual food items with quantities.
+
+Guidelines:
+- Extract all identifiable food items from the description
+- Include quantity for each item (default to 100 if not specified)
+- Use standard units (g for weight, ml for volume, unit for individual items)
+- Normalize food names to lowercase singular form
+- Return ONLY valid JSON with no additional text
+
+Example output: {"items": [{"name": "chicken", "quantity": 200}, {"name": "rice", "quantity": 100}]}`,
+        jsonSchema: ParsedMealSchema,
+        maxTokens: 500,
+        temperature: 0.3,
+      });
+
+      return result.content.items.map((item) => ({
+        name: item.name.toLowerCase().trim(),
+        quantity: item.quantity,
+      }));
+    } catch (error) {
+      // If it's a ResponseParsingError, provide context about the failure
+      if (error instanceof ResponseParsingError) {
+        throw new Error(`LLM meal parsing failed: Unable to parse response in expected format`);
+      }
+      throw error;
+    }
   }
 
   /**
@@ -170,7 +225,7 @@ export class ProcessMealService {
     }
 
     // Product doesn't exist; fetch nutrition via LLM
-    const nutrition = await this.llmClient.fetchNutritionData(originalName);
+    const nutrition = await this.fetchNutritionData(originalName);
 
     // Insert new product
     const productInsert: ProductInsert = {
@@ -193,6 +248,41 @@ export class ProcessMealService {
     }
 
     return newProduct;
+  }
+
+  /**
+   * Fetches nutrition data for a product from OpenRouter LLM
+   *
+   * @param productName - Name of the product
+   * @returns Nutrition data for the product
+   * @throws Error if LLM call or parsing fails
+   */
+  private async fetchNutritionData(productName: string): Promise<NutritionDataResponse> {
+    try {
+      const result = await this.openRouterService.chatCompletion<NutritionDataResponse>({
+        userMessage: `Provide nutrition data for "${productName}". Respond with ONLY valid JSON (no markdown, no code blocks):`,
+        systemMessage: `You are a nutrition expert. Provide accurate nutritional information for food items.
+
+Guidelines:
+- Return realistic nutrition values based on standard USDA/nutrition database data
+- Use 100g as basis for solids, 100ml for liquids, "unit" for individual items (eggs, etc.)
+- Include calories (per basis), protein, fat, and carbohydrates in grams
+- Return ONLY valid JSON with no additional text
+
+Example: {"nutritionBasis": "100g", "calories": 165, "protein": 31, "fat": 3.6, "carbs": 0}`,
+        jsonSchema: NutritionDataSchema,
+        maxTokens: 300,
+        temperature: 0.2, // Very low temperature for consistency
+      });
+
+      return result.content;
+    } catch (error) {
+      // If it's a ResponseParsingError, provide context
+      if (error instanceof ResponseParsingError) {
+        throw new Error(`Failed to fetch nutrition data for "${productName}": Invalid response format`);
+      }
+      throw error;
+    }
   }
 
   /**
