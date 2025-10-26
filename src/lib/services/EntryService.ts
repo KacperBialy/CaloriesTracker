@@ -58,10 +58,10 @@ export class EntryService {
         name: entry.products.name,
         quantity: entry.quantity,
         nutrition: {
-          calories: entry.products.calories,
-          protein: entry.products.protein,
-          fat: entry.products.fat,
-          carbs: entry.products.carbs,
+          calories: Number(((entry.quantity / 100) * entry.products.calories).toFixed(2)),
+          protein: Number(((entry.quantity / 100) * entry.products.protein).toFixed(2)),
+          fat: Number(((entry.quantity / 100) * entry.products.fat).toFixed(2)),
+          carbs: Number(((entry.quantity / 100) * entry.products.carbs).toFixed(2)),
         },
         consumedAt: entry.consumed_at,
       }));

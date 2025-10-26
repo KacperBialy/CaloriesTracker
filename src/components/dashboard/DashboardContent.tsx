@@ -1,6 +1,7 @@
 import React from "react";
 import { useSummary } from "../../lib/hooks/useSummary";
 import { SummaryPanel } from "./SummaryPanel";
+import { ConsumedProductsList } from "./ConsumedProductsList";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -52,13 +53,13 @@ function Spinner(): React.ReactNode {
 
 /**
  * DashboardContent orchestrates data fetching, loading, error, and success states.
- * Displays a spinner while loading, error alert on failure, or summary panel on success.
+ * Displays a spinner while loading, error alert on failure, or summary panel and entries on success.
  */
 export function DashboardContent(): React.ReactNode {
   const { data, loading, error, refetch } = useSummary();
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-8">
       {loading && <Spinner />}
 
       {error && !loading && (
@@ -66,10 +67,13 @@ export function DashboardContent(): React.ReactNode {
       )}
 
       {data && !loading && !error && (
-        <>
+        <div className="w-full max-w-4xl space-y-8">
           <SummaryPanel summary={data} />
-          <RefreshButton disabled={loading} onClick={refetch} />
-        </>
+          <ConsumedProductsList onEntriesChange={refetch} />
+          <div className="flex justify-center">
+            <RefreshButton disabled={loading} onClick={refetch} />
+          </div>
+        </div>
       )}
     </div>
   );
