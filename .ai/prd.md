@@ -125,17 +125,8 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   2. After clicking the "Delete" button and confirming, the product disappears from the list.
   3. After deleting a product, the daily summary of calories and macronutrients is immediately recalculated.
 
+
 ### US-007
-
-- Title: Handling a partially unrecognized command
-- Description: As the system, when I receive a command containing both recognizable and unrecognizable products, I want to save the correct ones and report the errors.
-- Acceptance Criteria:
-  1. For the query "chicken 200g, unknownproduct 50g", the API correctly processes and saves "chicken 200g".
-  2. The API response includes information about the successful addition of the chicken.
-  3. The API response also includes information that "unknownproduct 50g" was not recognized.
-  4. The web application does not crash, and the data for the chicken is displayed correctly.
-
-### US-008
 
 - Title: Logging out of the application
 - Description: As a user, I want to be able to log out of the application to end my session and secure access to my data.
