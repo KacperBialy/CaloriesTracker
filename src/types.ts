@@ -150,6 +150,16 @@ export const ProcessMealCommandSchema = z.object({
 
 export type ProcessMealCommandType = z.infer<typeof ProcessMealCommandSchema>;
 
+/**
+ * Validates UpsertUserGoalCommand input
+ * - dailyCalorieGoal: positive number representing calories
+ */
+export const UpsertUserGoalCommandSchema = z.object({
+  dailyCalorieGoal: z.number().positive("Daily calorie goal must be greater than 0"),
+});
+
+export type UpsertUserGoalCommandType = z.infer<typeof UpsertUserGoalCommandSchema>;
+
 // ============================================================================
 // OpenRouter Service Types
 // ============================================================================

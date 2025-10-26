@@ -58,7 +58,7 @@ export function SettingsModal({ isOpen, onClose, onSaveSuccess, currentGoal }: S
 
     try {
       const response = await fetch("/api/user-goals", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(command),
       });
