@@ -1,6 +1,8 @@
 ---
-import Welcome from "../components/Welcome.astro";
-import Layout from "../layouts/Layout.astro";
+import { AuthForm } from "../components/auth/AuthForm";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<Layout />
+<BaseLayout title="Login - CaloriesTracker">
+  <AuthForm client:load />
+</BaseLayout>

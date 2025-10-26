@@ -32,7 +32,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 
 ### 3.2. Web Application (Frontend - Astro + React + Tailwind)
 
-- F-009: Must allow users to log in and register exclusively using their Google account (Google OAuth2), utilizing integration with Supabase.
+- F-009: Must allow users to log in and register exclusively using their login and password, utilizing integration with Supabase.
 - F-010: Must present a main dashboard that displays consumption data for the current day only.
 - F-011: Must visualize the sum of consumed calories in relation to the daily goal set by the user (e.g., using a progress bar).
 - F-012: Must visualize the sum of consumed macronutrients (proteins, fats, carbohydrates) in grams.
@@ -44,7 +44,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 
 ### 4.1. In Scope for MVP
 
-- User authentication exclusively through Google OAuth2.
+- User authentication exclusively through login and password.
 - Processing meal queries sent to the API in text form.
 - Automatic retrieval of nutritional data.
 - Saving each product as a separate entry in the database.
@@ -67,13 +67,12 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 
 ### US-001
 
-- Title: Authentication with a Google account
-- Description: As a user, I want to be able to log into the application using my Google account to securely access my personalized data.
+- Title: Authentication with a login and password
+- Description: As a user, I want to be able to log into the application with a login and password to securely access my personalized data.
 - Acceptance Criteria:
-  1. The application's homepage displays a "Sign in with Google" button.
-  2. Clicking the button redirects to the standard Google authentication process.
-  3. After successfully logging in with Google, I am redirected back to the application and am logged in.
-  4. In case of a login error, an appropriate message is displayed.
+  1. The application's homepage displays a Sign Up/Sign in forms.
+  2. After successfully logging in, I am redirected to /dashboard.
+  3. In case of a login error, an appropriate message is displayed.
 
 ### US-002
 
@@ -83,7 +82,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   1. A "Settings" section is available in the application.
   2. In the settings, there is a field to enter the numerical value of the daily caloric goal.
   3. After saving, the new goal value is visible on the main dashboard.
-  4. The set goal is permanently saved to my account.
+  4. The set goal is permanently saved to my account (US-001).
   5. The system validates that the entered value is a positive integer.
 
 ### US-003
@@ -94,7 +93,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   1. The API accepts a POST request with text like "chicken 200g and rice 100g".
   2. The system correctly parses the text, identifying two products: "chicken" (200g) and "rice" (100g).
   3. Calorie and macronutrient data are retrieved for each product.
-  4. Each product is saved as a separate record in the database, associated with the authenticated user and the current date.
+  4. Each product is saved as a separate record in the database (US-001), associated with the authenticated user and the current date.
   5. The API returns a success response containing a summary of the added products.
 
 ### US-004
@@ -104,7 +103,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 - Acceptance Criteria:
   1. The main dashboard displays the total calories consumed on the current day.
   2. Progress towards the caloric goal is presented graphically (e.g., as a progress bar).
-  3. The dashboard displays the total amount of protein, fats, and carbohydrates in grams.
+  3. The dashboard displays the total amount of protein, fats, and carbohydrates in grams for a logged user (US-001).
   4. All values on the dashboard update automatically after a new product is added.
 
 ### US-005
@@ -112,7 +111,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
 - Title: Viewing the list of consumed products
 - Description: As a user, I want to see a list of all products consumed during the day so I can review and verify them.
 - Acceptance Criteria:
-  1. Below the daily summary, there is a list of products added on the current day.
+  1. Below the daily summary, there is a list of products added on the current day by a specific user (US-001).
   2. The list is sorted chronologically (from newest to oldest).
   3. Each item on the list includes the product name, its weight, calorie count, and macronutrients.
 
@@ -124,6 +123,7 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   1. A "Delete" icon/button is visible next to each product on the list.
   2. After clicking the "Delete" button and confirming, the product disappears from the list.
   3. After deleting a product, the daily summary of calories and macronutrients is immediately recalculated.
+  4. User can delete and object only when it's created by him (US-001).
 
 
 ### US-007

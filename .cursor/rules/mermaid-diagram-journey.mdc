@@ -1,0 +1,160 @@
+---
+globs:
+alwaysApply: false
+---
+
+# Mermaid Diagram - User Journey
+
+You are a UX specialist tasked with creating a Mermaid diagram to visualize the user journey for the login and registration module. The diagram should be created in the following file: DESTINATION
+
+You will need to refer to the following files to understand existing requirements:
+
+<file_references>
+.ai/prd.md
+
+</file_references>
+
+<destination>
+.ai/diagrams/journey.md
+</destination>
+
+Your task is to analyze the login and registration module specifications and create a comprehensive Mermaid diagram that accurately depicts the user journey.
+
+Before creating the diagram, analyze the requirements and plan your approach. Place your analysis inside the <user_journey_analysis> tags. In this analysis:
+
+1. List all user paths mentioned in the reference files.
+2. Identify main journeys and their corresponding states.
+3. Determine decision points and alternative paths.
+4. Provide a brief description of each state's purpose.
+
+When you are ready to create the diagram, adhere to the following guidelines:
+
+1. Begin the diagram with the following syntax:
+
+```
+   stateDiagram-v2
+   
+```
+
+2. Include the following elements in your diagram:
+- User paths based on existing requirements
+- Using the application as an unauthenticated user
+- Accessing the main functionality of the application
+- Logging in
+- Creating an account
+- Password recovery
+- High-level user journey in accordance with project requirements and USER STORIES
+- Decision points and alternative paths
+- Email verification flow
+- Focus on business paths, not technical aspects
+
+3. Adhere to these Mermaid syntax rules:
+- Initial and final states must be correctly defined:
+
+```
+     [*] --> HomePage
+     HomePage --> [*]
+     
+```
+
+- Use composite states to group related states:
+
+```
+     state "Registration Process" as Registration {
+       [*] --> RegistrationForm
+       RegistrationForm --> DataValidation
+       DataValidation --> EmailSending
+     }
+     
+```
+
+- For decision branches, use correct syntax:
+
+```
+     state if_verification <<choice>>
+     TokenVerification --> if_verification
+     if_verification --> TokenValid: Token OK
+     if_verification --> TokenInvalid: Token incorrect
+     
+```
+
+- Use notes for additional information:
+
+```
+     LoginForm: The user can log in
+     note right of LoginForm
+       The form contains email and password fields
+       and a link for password recovery
+     end note
+     
+```
+
+- For parallel states, use correct syntax:
+
+```
+     state fork_state <<fork>>
+     state join_state <<join>>
+     Registration --> fork_state
+     fork_state --> EmailSending
+     fork_state --> DatabaseUpdate
+     EmailSending --> join_state
+     DatabaseUpdate --> join_state
+     join_state --> FinalState
+     
+```
+
+- Use namespaces to organize complex diagrams:
+
+```
+     state "Authentication" as Authentication {
+       state "Login" as Login {
+         // states for the login process
+       }
+       state "Registration" as Registration {
+         // states for the registration process
+       }
+     }
+     
+```
+
+- For state history, use correct syntax:
+
+```
+     state "User Panel" as Panel {
+       [*] --> history
+       state history <<history>>
+     }
+     
+```
+
+- For transitions with events and conditions, use correct syntax:
+
+```
+     StateA --> StateB: Next Button [data correct]
+     
+```
+
+- Avoid using URLs, endpoint addresses, brackets, long function names, or complex expressions in state names:
+
+WRONG: [Home Page (Rule Creator)]
+
+CORRECT: [Rule Creator]
+
+- Use consistent naming throughout the document
+- Avoid long labels that may cause rendering issues
+
+4. Avoid these common errors:
+
+- Missing Mermaid declaration and diagram type at the beginning
+- Incorrect decision states (missing choice, fork, join)
+- Missing initial and final states ([*])
+- Inconsistent state naming
+- Unclosed nested states (missing closing curly brace)
+- Overly complex diagrams without proper state grouping
+- Incorrect transition labels
+- Exceeding line length limits
+- Lack of empty lines before and after Mermaid code blocks
+
+After creating the diagram, review it thoroughly to ensure no syntax errors or rendering issues. Make necessary adjustments to improve clarity and accuracy.
+
+When ready to present the final diagram, surround it with the <mermaid_diagram> tags.
