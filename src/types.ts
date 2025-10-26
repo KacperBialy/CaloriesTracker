@@ -160,6 +160,29 @@ export const UpsertUserGoalCommandSchema = z.object({
 
 export type UpsertUserGoalCommandType = z.infer<typeof UpsertUserGoalCommandSchema>;
 
+/**
+ * Validates GetEntriesQuery input
+ * - date: optional, 'YYYY-MM-DD' format
+ */
+export const GetEntriesQuerySchema = z.object({
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format")
+    .optional(),
+});
+
+export type GetEntriesQueryType = z.infer<typeof GetEntriesQuerySchema>;
+
+/**
+ * Validates entryId path parameter
+ * - entryId: UUID string
+ */
+export const EntryIdParamSchema = z.object({
+  entryId: z.string().uuid("Invalid entry ID format"),
+});
+
+export type EntryIdParamType = z.infer<typeof EntryIdParamSchema>;
+
 // ============================================================================
 // OpenRouter Service Types
 // ============================================================================

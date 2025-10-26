@@ -65,12 +65,7 @@
 
 **GET** `/api/entries`
 
-- Description: Retrieve a paginated list of user entries
-- Query Parameters:
-  - `date` (optional, default = today, format `YYYY-MM-DD`)
-  - `page` (optional, default = 1)
-  - `size` (optional, default = 20)
-  - `sort` (optional, e.g. `consumed_at:desc`)
+- Description: Retrieve list of user entries
 - Response Payload:
   ```json
   {
@@ -83,8 +78,7 @@
         "nutrition": { "calories": number, "protein": number, "fat": number, "carbs": number },
         "consumedAt": "YYYY-MM-DD"
       }
-    ],
-    "pagination": { "page": number, "size": number, "total": number }
+    ]
   }
   ```
 - Success Codes: `200 OK`
