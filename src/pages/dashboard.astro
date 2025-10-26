@@ -1,11 +1,11 @@
 ---
-import DashboardLayout from "../layouts/DashboardLayout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import { DashboardPage } from "../components/dashboard/DashboardPage";
 ---
 
-<DashboardLayout title="Dashboard - CaloriesTracker">
+<BaseLayout title="Login - CaloriesTracker">
   <DashboardPage client:load />
-</DashboardLayout>
+</BaseLayout>
 
 <style>
   :global(body) {

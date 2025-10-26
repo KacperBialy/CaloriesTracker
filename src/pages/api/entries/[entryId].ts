@@ -59,8 +59,23 @@ export const DELETE: APIRoute = async (context) => {
       );
     }
 
+    // Guard: Verify supabase client is available
+    if (!context.locals.supabase) {
+      return new Response(
+        JSON.stringify({
+          error: "Internal Server Error",
+          message: "Database connection unavailable",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     // Step 4: Call EntryService to delete entry
-    const deleteResult = await EntryService.deleteEntry(userId, validationResult.data.entryId);
+    const service = new EntryService(context.locals.supabase);
+    const deleteResult = await service.deleteEntry(userId, validationResult.data.entryId);
 
     // Step 5: Handle deletion results and return appropriate response
     if (!deleteResult.success) {

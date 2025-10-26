@@ -19,8 +19,16 @@ export const POST: APIRoute = async (context) => {
       });
     }
 
+    // Guard: Verify supabase client is available
+    if (!context.locals.supabase) {
+      return new Response(JSON.stringify({ error: "Internal server error" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     // Step 4: Process the meal description
-    const service = new ProcessMealService();
+    const service = new ProcessMealService(context.locals.supabase);
     const result = await service.process(body.text, DEFAULT_USER_ID);
 
     // Step 5: Determine response status based on results

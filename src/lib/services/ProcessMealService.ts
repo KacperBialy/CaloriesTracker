@@ -1,6 +1,7 @@
 import { z } from "zod";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "../../db/database.types";
 import type { EntryDto, ErrorDto, NutritionDto, ProductEntity, ProductInsert } from "../../types";
-import { supabaseClient } from "../../db/supabase.client";
 import { OpenRouterService, ResponseParsingError } from "./OpenRouterService";
 
 /**
@@ -47,9 +48,11 @@ type NutritionDataResponse = z.infer<typeof NutritionDataSchema>;
  */
 export class ProcessMealService {
   private openRouterService: OpenRouterService;
+  private supabase: SupabaseClient<Database>;
 
-  constructor() {
+  constructor(supabase: SupabaseClient<Database>) {
     this.openRouterService = new OpenRouterService();
+    this.supabase = supabase;
   }
 
   /**
@@ -181,7 +184,7 @@ Example output: {"items": [{"name": "chicken", "quantity": 200}, {"name": "rice"
       return new Map();
     }
 
-    const { data, error } = await supabaseClient.from("products").select("*").in("name", normalizedNames);
+    const { data, error } = await this.supabase.from("products").select("*").in("name", normalizedNames);
 
     if (error) {
       throw new Error(`Database error: ${error.message}`);
@@ -209,7 +212,7 @@ Example output: {"items": [{"name": "chicken", "quantity": 200}, {"name": "rice"
    */
   private async fetchOrCreateProduct(normalizedName: string, originalName: string): Promise<ProductEntity> {
     // Try to fetch from database
-    const { data: existing, error: fetchError } = await supabaseClient
+    const { data: existing, error: fetchError } = await this.supabase
       .from("products")
       .select("*")
       .eq("name", normalizedName)
@@ -237,7 +240,7 @@ Example output: {"items": [{"name": "chicken", "quantity": 200}, {"name": "rice"
       carbs: nutrition.carbs,
     };
 
-    const { data: newProduct, error: insertError } = await supabaseClient
+    const { data: newProduct, error: insertError } = await this.supabase
       .from("products")
       .insert([productInsert])
       .select()
@@ -297,7 +300,7 @@ Example: {"nutritionBasis": "100g", "calories": 165, "protein": 31, "fat": 3.6, 
   private async insertEntry(product: ProductEntity, quantity: number, userId: string): Promise<EntryDto> {
     const today = new Date().toISOString().split("T")[0];
 
-    const { data: entry, error } = await supabaseClient
+    const { data: entry, error } = await this.supabase
       .from("entries")
       .insert([
         {

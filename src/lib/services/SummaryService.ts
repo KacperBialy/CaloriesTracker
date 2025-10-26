@@ -1,5 +1,6 @@
-import { supabaseClient } from "../../db/supabase.client";
 import type { DailySummaryDto } from "../../types";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "../../db/database.types";
 
 interface EntryWithProduct {
   quantity: number;
@@ -15,11 +16,15 @@ interface EntryWithProduct {
 /**
  * Retrieves aggregated nutrition summary and user goal for a given date
  */
-export async function getDailySummary(userId: string, date?: string): Promise<DailySummaryDto> {
+export async function getDailySummary(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  date?: string
+): Promise<DailySummaryDto> {
   const targetDate = date ?? new Date().toISOString().split("T")[0];
 
   // Fetch entries with product details
-  const { data: entries, error: entriesError } = await supabaseClient
+  const { data: entries, error: entriesError } = await supabase
     .from("entries")
     .select(`quantity, products(calories, protein, fat, carbs, nutrition_basis)`)
     .eq("user_id", userId)
@@ -44,7 +49,7 @@ export async function getDailySummary(userId: string, date?: string): Promise<Da
   }
 
   // Fetch user goal
-  const { data: goalRow, error: goalError } = await supabaseClient
+  const { data: goalRow, error: goalError } = await supabase
     .from("user_goals")
     .select("daily_calorie_goal")
     .eq("user_id", userId)

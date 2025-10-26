@@ -1,4 +1,5 @@
-import { supabaseClient } from "../../db/supabase.client";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "../../db/database.types";
 import type { EntryDto, EntriesResponseDto, GetEntriesQueryType } from "../../types";
 
 interface EntryWithProduct {
@@ -19,6 +20,12 @@ interface EntryWithProduct {
  * Service for managing user entries (meals)
  */
 export class EntryService {
+  private supabase: SupabaseClient<Database>;
+
+  constructor(supabase: SupabaseClient<Database>) {
+    this.supabase = supabase;
+  }
+
   /**
    * Retrieves entries for a user with optional date filtering
    * @param userId - The authenticated user's ID
@@ -26,7 +33,7 @@ export class EntryService {
    * @returns EntriesResponseDto with entries and pagination metadata
    * @throws Error if database query fails
    */
-  static async getEntries(userId: string, query: GetEntriesQueryType): Promise<EntriesResponseDto> {
+  async getEntries(userId: string, query: GetEntriesQueryType): Promise<EntriesResponseDto> {
     // Guard: Validate user ID
     if (!userId || typeof userId !== "string") {
       throw new Error("Invalid user ID");
@@ -34,7 +41,7 @@ export class EntryService {
 
     try {
       // Build query with entries and product details
-      let supabaseQuery = supabaseClient
+      let supabaseQuery = this.supabase
         .from("entries")
         .select(`id, quantity, consumed_at, products(id, name, calories, protein, fat, carbs)`)
         .eq("user_id", userId)
@@ -90,7 +97,7 @@ export class EntryService {
    * @returns Object with success status and reason if applicable
    * @throws Error only for unexpected database errors
    */
-  static async deleteEntry(
+  async deleteEntry(
     userId: string,
     entryId: string
   ): Promise<{ success: boolean; reason?: "not-found" | "forbidden" }> {
@@ -105,7 +112,7 @@ export class EntryService {
 
     try {
       // First, fetch the entry to verify ownership
-      const { data: entry, error: fetchError } = await supabaseClient
+      const { data: entry, error: fetchError } = await this.supabase
         .from("entries")
         .select("id, user_id")
         .eq("id", entryId)
@@ -125,7 +132,7 @@ export class EntryService {
       }
 
       // Delete the entry
-      const { error: deleteError } = await supabaseClient
+      const { error: deleteError } = await this.supabase
         .from("entries")
         .delete()
         .eq("id", entryId)

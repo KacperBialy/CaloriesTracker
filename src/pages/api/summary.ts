@@ -15,7 +15,7 @@ const GetSummaryQuerySchema = z.object({
     .refine((str) => !str || isValidIsoDate(str), { message: "Invalid date format, expected YYYY-MM-DD" }),
 });
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request, locals }) => {
   // Parse and validate query parameters
   const url = new URL(request.url);
   const parseResult = GetSummaryQuerySchema.safeParse({
@@ -30,11 +30,16 @@ export const GET: APIRoute = async ({ request }) => {
 
   // Use default user ID for MVP
   const userId = DEFAULT_USER_ID;
+
+  // Guard: Verify supabase client is available
+  if (!locals.supabase) {
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
+  }
+
   try {
-    const summary: DailySummaryDto = await getDailySummary(userId, date);
+    const summary: DailySummaryDto = await getDailySummary(locals.supabase, userId, date);
     return new Response(JSON.stringify(summary), { status: 200 });
-  } catch (error) {
-    console.error("Failed to get daily summary", error);
+  } catch {
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 };

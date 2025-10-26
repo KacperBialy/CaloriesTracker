@@ -62,8 +62,23 @@ export const GET: APIRoute = async (context) => {
       );
     }
 
+    // Guard: Verify supabase client is available
+    if (!context.locals.supabase) {
+      return new Response(
+        JSON.stringify({
+          error: "Internal Server Error",
+          message: "Database connection unavailable",
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     // Step 4: Call EntryService to fetch entries
-    const response = await EntryService.getEntries(userId, validationResult.data);
+    const service = new EntryService(context.locals.supabase);
+    const response = await service.getEntries(userId, validationResult.data);
 
     // Step 5: Return successful response
     return new Response(JSON.stringify(response), {

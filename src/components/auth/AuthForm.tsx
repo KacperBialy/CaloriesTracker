@@ -70,8 +70,8 @@ export const AuthForm: React.FC = () => {
         const errorData = await response.json();
         setError(errorData.message || "Invalid credentials");
       } else {
-        // Successful login - reload page to trigger middleware redirect
-        window.location.reload();
+        // Successful login - redirect to dashboard
+        window.location.href = "/dashboard";
       }
     } catch (err) {
       console.error("Sign-in error:", err);
