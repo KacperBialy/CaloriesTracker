@@ -3,7 +3,7 @@ import { createSupabaseServerInstance } from "../../../db/supabase.client";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ cookies, request, redirect }) => {
+export const POST: APIRoute = async ({ cookies, request }) => {
   const supabase = createSupabaseServerInstance({
     cookies,
     headers: request.headers,
@@ -17,5 +17,5 @@ export const POST: APIRoute = async ({ cookies, request, redirect }) => {
     });
   }
 
-  return redirect("/");
+  return new Response(null, { status: 200 });
 };

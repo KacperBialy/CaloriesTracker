@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Settings, LogOut } from "lucide-react";
+import React, { useCallback } from "react";
+import { Settings, LogOut, AlertCircle } from "lucide-react";
 import { SettingsModal } from "./SettingsModal";
+import { useAuth } from "../../lib/hooks/useAuth";
 import type { SummaryVM } from "../../types";
 
 interface HeaderProps {
@@ -11,25 +12,19 @@ interface HeaderProps {
 
 /**
  * Header component displays the top navigation bar with settings and logout controls.
- * Manages the SettingsModal state and handles user logout flow.
+ * Manages user state verification, SettingsModal state, and handles user logout flow.
+ * Includes proper error handling and user feedback for authentication issues.
  */
 export function Header({ isLoading, summary, onRefreshNeeded }: HeaderProps): React.ReactNode {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
+  const { isLoading: isAuthLoading, error: authError, logout } = useAuth();
 
-  const handleLogout = async (): Promise<void> => {
-    try {
-      // Import supabase client dynamically to avoid circular dependencies
-      const { supabaseClient } = await import("../../db/supabase.client");
+  // Handle logout with useCallback for optimized event handling
+  const handleLogout = useCallback(async (): Promise<void> => {
+    if (isAuthLoading) return; // Prevent multiple logout attempts
 
-      await supabaseClient.auth.signOut();
-      // Redirect to login page
-      window.location.href = "/login";
-    } catch (err) {
-      console.error("Logout failed:", err);
-      // Fallback redirect
-      window.location.href = "/login";
-    }
-  };
+    await logout();
+  }, [logout, isAuthLoading]);
 
   const handleSettingsSave = (): void => {
     // Trigger summary refresh after successful goal update
@@ -45,10 +40,22 @@ export function Header({ isLoading, summary, onRefreshNeeded }: HeaderProps): Re
 
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
+            {/* Auth Error Alert */}
+            {authError && (
+              <div
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-700 text-sm"
+                role="alert"
+                aria-live="polite"
+              >
+                <AlertCircle size={16} />
+                <span>{authError}</span>
+              </div>
+            )}
+
             {/* Settings Icon Button */}
             <button
               onClick={() => setIsSettingsOpen(true)}
-              disabled={isLoading}
+              disabled={isLoading || isAuthLoading}
               aria-label="Open settings"
               title="Settings"
               className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
@@ -59,7 +66,7 @@ export function Header({ isLoading, summary, onRefreshNeeded }: HeaderProps): Re
             {/* Logout Button */}
             <button
               onClick={handleLogout}
-              disabled={isLoading}
+              disabled={isLoading || isAuthLoading}
               aria-label="Logout"
               title="Logout"
               className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
