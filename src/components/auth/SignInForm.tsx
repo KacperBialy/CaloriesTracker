@@ -148,17 +148,6 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onError }) => {
       <Button type="submit" disabled={loading} className="w-full" aria-busy={loading}>
         {loading ? "Signing in..." : "Sign In"}
       </Button>
-
-      <div className="text-center">
-        <button
-          type="button"
-          onClick={handleForgotPassword}
-          disabled={loading}
-          className="text-sm text-primary hover:underline disabled:opacity-50"
-        >
-          Forgot password?
-        </button>
-      </div>
     </form>
   );
 };
