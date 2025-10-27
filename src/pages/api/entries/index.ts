@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { GetEntriesQuerySchema, type GetEntriesQueryType } from "../../../types";
 import { EntryService } from "../../../lib/services/EntryService";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -45,11 +44,9 @@ export const GET: APIRoute = async (context) => {
     }
 
     // Step 3: Get user ID (from authenticated session)
-    // Currently using DEFAULT_USER_ID for development
-    const userId = DEFAULT_USER_ID;
 
     // Guard: Verify user is authenticated
-    if (!userId) {
+    if (!context.locals.user) {
       return new Response(
         JSON.stringify({
           error: "Unauthorized",
@@ -78,7 +75,7 @@ export const GET: APIRoute = async (context) => {
 
     // Step 4: Call EntryService to fetch entries
     const service = new EntryService(context.locals.supabase);
-    const response = await service.getEntries(userId, validationResult.data);
+    const response = await service.getEntries(context.locals.user.id, validationResult.data);
 
     // Step 5: Return successful response
     return new Response(JSON.stringify(response), {

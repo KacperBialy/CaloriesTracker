@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 import type { DailySummaryDto } from "../../types";
-import { DEFAULT_USER_ID } from "../../db/supabase.client";
 import { isValidIsoDate } from "../../lib/utils";
 import { getDailySummary } from "@/lib/services/SummaryService";
 
@@ -28,16 +27,12 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
   const { date } = parseResult.data;
 
-  // Use default user ID for MVP
-  const userId = DEFAULT_USER_ID;
-
-  // Guard: Verify supabase client is available
-  if (!locals.supabase) {
+  if (!locals.supabase || !locals.user) {
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
   }
 
   try {
-    const summary: DailySummaryDto = await getDailySummary(locals.supabase, userId, date);
+    const summary: DailySummaryDto = await getDailySummary(locals.supabase, locals.user.id, date);
     return new Response(JSON.stringify(summary), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });

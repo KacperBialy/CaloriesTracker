@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { UserGoalService } from "../../lib/services/UserGoalService";
 import { UpsertUserGoalCommandSchema } from "../../types";
-import { DEFAULT_USER_ID } from "../../db/supabase.client";
 
 export const prerender = false;
 
@@ -16,19 +15,16 @@ export const GET: APIRoute = async ({ locals }) => {
     // Get Supabase client from middleware
     const supabase = locals.supabase;
 
-    if (!supabase) {
+    if (!supabase || !locals.user) {
       return new Response(JSON.stringify({ error: "Internal server error" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    // Use DEFAULT_USER_ID for MVP
-    const userId = DEFAULT_USER_ID;
-
     // Initialize service and fetch user goal
     const service = new UserGoalService(supabase);
-    const goal = await service.getUserGoal(userId);
+    const goal = await service.getUserGoal(locals.user.id);
 
     // Return 404 if user has not set a goal yet
     if (!goal) {
@@ -68,7 +64,7 @@ export const PUT: APIRoute = async ({ locals, request }) => {
     // Get Supabase client from middleware
     const supabase = locals.supabase;
 
-    if (!supabase) {
+    if (!supabase || !locals.user) {
       return new Response(JSON.stringify({ error: "Internal server error" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -95,12 +91,9 @@ export const PUT: APIRoute = async ({ locals, request }) => {
     // Extract validated data
     const { dailyCalorieGoal } = validationResult.data;
 
-    // Use DEFAULT_USER_ID for MVP
-    const userId = DEFAULT_USER_ID;
-
     // Initialize service and upsert user goal
     const service = new UserGoalService(supabase);
-    await service.upsertUserGoal(userId, dailyCalorieGoal);
+    await service.upsertUserGoal(locals.user.id, dailyCalorieGoal);
 
     return new Response(JSON.stringify({}), {
       status: 200,

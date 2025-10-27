@@ -25,7 +25,7 @@ export function DashboardPage(): React.ReactNode {
     <div className="min-h-screen bg-gray-50">
       <Header isLoading={isLoading} summary={summary} onRefreshNeeded={handleRefreshNeeded} />
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="px-4 py-8">
         <DashboardContent key={refreshTrigger} />
       </main>
     </div>

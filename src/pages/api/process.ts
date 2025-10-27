@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { ProcessMealCommandSchema, type ProcessMealCommandType } from "../../types";
 import { ProcessMealService } from "../../lib/services/ProcessMealService";
-import { DEFAULT_USER_ID } from "../../db/supabase.client";
 
 export const prerender = false;
 
@@ -20,7 +19,7 @@ export const POST: APIRoute = async (context) => {
     }
 
     // Guard: Verify supabase client is available
-    if (!context.locals.supabase) {
+    if (!context.locals.supabase || !context.locals.user) {
       return new Response(JSON.stringify({ error: "Internal server error" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -29,7 +28,7 @@ export const POST: APIRoute = async (context) => {
 
     // Step 4: Process the meal description
     const service = new ProcessMealService(context.locals.supabase);
-    const result = await service.process(body.text, DEFAULT_USER_ID);
+    const result = await service.process(body.text, context.locals.user.id);
 
     // Step 5: Determine response status based on results
     // Return 201 if at least one entry was created, otherwise 500

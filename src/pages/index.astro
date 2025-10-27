@@ -4,5 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Login - CaloriesTracker">
-  <AuthForm client:load />
+  <div class="min-h-screen bg-background flex items-center justify-center p-4">
+    <AuthForm client:load />
+  </div>
 </BaseLayout>

@@ -9,9 +9,6 @@ export const cookieOptions: CookieOptionsWithName = {
   sameSite: "lax",
 };
 
-// MVP: Default user ID for development
-export const DEFAULT_USER_ID = "550e8400-e29b-41d4-a716-446655440000";
-
 function parseCookieHeader(cookieHeader: string): { name: string; value: string }[] {
   return cookieHeader.split(";").map((cookie) => {
     const [name, ...rest] = cookie.trim().split("=");
