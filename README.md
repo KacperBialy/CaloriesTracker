@@ -27,6 +27,8 @@ The project is built with a modern tech stack focused on performance and develop
 - **Language**: [TypeScript](https://www.typescriptlang.org/) v5
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) v4.0.17
 - **UI Components**: [Shadcn/ui](https://ui.shadcn.com/)
+- **Unit & Integration Testing**: [Vitest](https://vitest.dev/), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- **E2E Testing**: [Playwright](https://playwright.dev/)
 
 ## Getting Started Locally
 
