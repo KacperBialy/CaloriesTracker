@@ -89,7 +89,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onError }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4" data-test-id="signup-form">
+    <form onSubmit={handleSubmit} className="space-y-4" data-test-id="signup-form" noValidate>
       {error && (
         <Alert
           variant="destructive"

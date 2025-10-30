@@ -68,7 +68,8 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onError }) => {
     }
   };
 
-  const handleForgotPassword = async () => {
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  const handleForgotPassword = async (): Promise<void> => {
     const forgotEmail = email || prompt("Enter your email address");
     if (!forgotEmail || !validateEmail(forgotEmail)) {
       alert("Please enter a valid email address");
@@ -102,7 +103,7 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onError }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4" data-test-id="signin-form">
+    <form onSubmit={handleSubmit} className="space-y-4" data-test-id="signin-form" noValidate>
       {error && (
         <Alert
           variant="destructive"
