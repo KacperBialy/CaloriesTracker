@@ -87,13 +87,13 @@ export function SettingsModal({ isOpen, onClose, onSaveSuccess, currentGoal }: S
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent showCloseButton>
+      <DialogContent showCloseButton data-test-id="settings-modal">
         <DialogHeader>
           <DialogTitle>Daily Calorie Goal</DialogTitle>
           <DialogDescription>Set your target daily calorie intake to track your progress</DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" data-test-id="settings-modal-form">
           {/* Goal Input */}
           <div>
             <label htmlFor="daily-goal" className="block text-sm font-medium mb-2">
@@ -113,13 +113,14 @@ export function SettingsModal({ isOpen, onClose, onSaveSuccess, currentGoal }: S
               disabled={loading}
               className="w-full px-3 py-2 border border-input rounded-md bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               placeholder="e.g., 2000"
+              data-test-id="settings-modal-goal-input"
             />
             <p className="text-xs text-muted-foreground mt-1">Enter a positive number for your daily target.</p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" data-test-id="settings-modal-error">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
@@ -127,10 +128,16 @@ export function SettingsModal({ isOpen, onClose, onSaveSuccess, currentGoal }: S
 
           {/* Form Actions */}
           <DialogFooter>
-            <Button type="button" onClick={handleCancel} disabled={loading} variant="outline">
+            <Button
+              type="button"
+              onClick={handleCancel}
+              disabled={loading}
+              variant="outline"
+              data-test-id="settings-modal-cancel"
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={loading || !isValidGoal(goalInput)}>
+            <Button type="submit" disabled={loading || !isValidGoal(goalInput)} data-test-id="settings-modal-save">
               {loading ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>

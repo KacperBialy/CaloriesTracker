@@ -102,9 +102,15 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onError }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4" data-test-id="signin-form">
       {error && (
-        <Alert variant="destructive" className="text-sm" role="alert" aria-live="polite">
+        <Alert
+          variant="destructive"
+          className="text-sm"
+          role="alert"
+          aria-live="polite"
+          data-test-id="signin-form-error"
+        >
           {error}
         </Alert>
       )}
@@ -123,8 +129,13 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onError }) => {
           }`}
           placeholder="you@example.com"
           disabled={loading}
+          data-test-id="signin-form-email"
         />
-        {formErrors.email && <p className="mt-1 text-xs text-destructive">{formErrors.email}</p>}
+        {formErrors.email && (
+          <p className="mt-1 text-xs text-destructive" data-test-id="signin-form-email-error">
+            {formErrors.email}
+          </p>
+        )}
       </div>
 
       <div>
@@ -141,11 +152,16 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onError }) => {
           }`}
           placeholder="••••••••"
           disabled={loading}
+          data-test-id="signin-form-password"
         />
-        {formErrors.password && <p className="mt-1 text-xs text-destructive">{formErrors.password}</p>}
+        {formErrors.password && (
+          <p className="mt-1 text-xs text-destructive" data-test-id="signin-form-password-error">
+            {formErrors.password}
+          </p>
+        )}
       </div>
 
-      <Button type="submit" disabled={loading} className="w-full" aria-busy={loading}>
+      <Button type="submit" disabled={loading} className="w-full" aria-busy={loading} data-test-id="signin-form-submit">
         {loading ? "Signing in..." : "Sign In"}
       </Button>
     </form>

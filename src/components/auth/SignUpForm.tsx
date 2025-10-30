@@ -89,15 +89,26 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onError }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4" data-test-id="signup-form">
       {error && (
-        <Alert variant="destructive" className="text-sm" role="alert" aria-live="polite">
+        <Alert
+          variant="destructive"
+          className="text-sm"
+          role="alert"
+          aria-live="polite"
+          data-test-id="signup-form-error"
+        >
           {error}
         </Alert>
       )}
 
       {success && (
-        <Alert className="text-sm bg-green-50 border-green-200 text-green-800" role="status" aria-live="polite">
+        <Alert
+          className="text-sm bg-green-50 border-green-200 text-green-800"
+          role="status"
+          aria-live="polite"
+          data-test-id="signup-form-success"
+        >
           {success}
         </Alert>
       )}
@@ -116,8 +127,13 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onError }) => {
           }`}
           placeholder="you@example.com"
           disabled={loading}
+          data-test-id="signup-form-email"
         />
-        {formErrors.email && <p className="mt-1 text-xs text-destructive">{formErrors.email}</p>}
+        {formErrors.email && (
+          <p className="mt-1 text-xs text-destructive" data-test-id="signup-form-email-error">
+            {formErrors.email}
+          </p>
+        )}
       </div>
 
       <div>
@@ -134,8 +150,13 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onError }) => {
           }`}
           placeholder="••••••••"
           disabled={loading}
+          data-test-id="signup-form-password"
         />
-        {formErrors.password && <p className="mt-1 text-xs text-destructive">{formErrors.password}</p>}
+        {formErrors.password && (
+          <p className="mt-1 text-xs text-destructive" data-test-id="signup-form-password-error">
+            {formErrors.password}
+          </p>
+        )}
       </div>
 
       <div>
@@ -152,11 +173,16 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onError }) => {
           }`}
           placeholder="••••••••"
           disabled={loading}
+          data-test-id="signup-form-confirm-password"
         />
-        {formErrors.confirmPassword && <p className="mt-1 text-xs text-destructive">{formErrors.confirmPassword}</p>}
+        {formErrors.confirmPassword && (
+          <p className="mt-1 text-xs text-destructive" data-test-id="signup-form-confirm-password-error">
+            {formErrors.confirmPassword}
+          </p>
+        )}
       </div>
 
-      <Button type="submit" disabled={loading} className="w-full" aria-busy={loading}>
+      <Button type="submit" disabled={loading} className="w-full" aria-busy={loading} data-test-id="signup-form-submit">
         {loading ? "Creating account..." : "Sign Up"}
       </Button>
     </form>

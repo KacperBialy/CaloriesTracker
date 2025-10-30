@@ -1,3 +1,5 @@
+import path from "path";
+import dotenv from "dotenv";
 import { defineConfig, devices } from "@playwright/test";
 
 /**
@@ -43,3 +45,5 @@ export default defineConfig({
     timeout: 120 * 1000,
   },
 });
+
+dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });

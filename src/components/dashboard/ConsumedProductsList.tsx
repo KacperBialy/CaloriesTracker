@@ -78,7 +78,7 @@ export function ConsumedProductsList({ onEntriesChange }: ConsumedProductsListPr
   // Loading state
   if (isLoading) {
     return (
-      <div className="w-full space-y-3">
+      <div className="w-full space-y-3" data-test-id="consumed-products-list-loading">
         <h2 className="text-2xl font-bold text-gray-900">Today&apos;s Entries</h2>
         <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
@@ -92,9 +92,9 @@ export function ConsumedProductsList({ onEntriesChange }: ConsumedProductsListPr
   // Error state
   if (error && !isLoading) {
     return (
-      <div className="w-full space-y-3">
+      <div className="w-full space-y-3" data-test-id="consumed-products-list-error">
         <h2 className="text-2xl font-bold text-gray-900">Today&apos;s Entries</h2>
-        <Alert variant="destructive">
+        <Alert variant="destructive" data-test-id="consumed-products-list-error-alert">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error loading entries</AlertTitle>
           <AlertDescription>{error.message}</AlertDescription>
@@ -106,7 +106,7 @@ export function ConsumedProductsList({ onEntriesChange }: ConsumedProductsListPr
   // Empty state
   if (entries.length === 0 && !isLoading && !error) {
     return (
-      <div className="w-full space-y-3">
+      <div className="w-full space-y-3" data-test-id="consumed-products-list-empty">
         <h2 className="text-2xl font-bold text-gray-900">Today&apos;s Entries</h2>
         <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
           <p className="text-gray-600">No entries logged today</p>
@@ -118,10 +118,10 @@ export function ConsumedProductsList({ onEntriesChange }: ConsumedProductsListPr
 
   // Render table
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-4" data-test-id="consumed-products-list">
       <h2 className="text-2xl font-bold text-gray-900">Today&apos;s Entries</h2>
 
-      <div className="rounded-lg border border-gray-200 bg-white">
+      <div className="rounded-lg border border-gray-200 bg-white" data-test-id="consumed-products-list-table-container">
         <Table>
           <TableHeader>
             <TableRow>
@@ -136,7 +136,7 @@ export function ConsumedProductsList({ onEntriesChange }: ConsumedProductsListPr
           </TableHeader>
           <TableBody>
             {entries.map((entry) => (
-              <TableRow key={entry.entryId}>
+              <TableRow key={entry.entryId} data-test-id={`consumed-products-list-entry-${entry.entryId}`}>
                 <TableCell className="font-medium">{entry.name}</TableCell>
                 <TableCell className="text-center">{entry.quantity}g</TableCell>
                 <TableCell className="text-center">{entry.nutrition.calories}</TableCell>
@@ -150,6 +150,7 @@ export function ConsumedProductsList({ onEntriesChange }: ConsumedProductsListPr
                     onClick={() => handleDeleteClick(entry)}
                     className="text-red-600 hover:bg-red-50 hover:text-red-700"
                     aria-label={`Delete ${entry.name}`}
+                    data-test-id={`consumed-products-list-delete-${entry.entryId}`}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -162,7 +163,7 @@ export function ConsumedProductsList({ onEntriesChange }: ConsumedProductsListPr
 
       {/* Delete Confirmation Modal */}
       <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-        <DialogContent>
+        <DialogContent data-test-id="consumed-products-list-delete-modal">
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
@@ -171,17 +172,29 @@ export function ConsumedProductsList({ onEntriesChange }: ConsumedProductsListPr
           </DialogHeader>
 
           {deleteError && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" data-test-id="consumed-products-list-delete-modal-error">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{deleteError}</AlertDescription>
             </Alert>
           )}
 
           <DialogFooter className="gap-2">
-            <Button type="button" variant="outline" onClick={handleDeleteCancel} disabled={isDeleting}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleDeleteCancel}
+              disabled={isDeleting}
+              data-test-id="consumed-products-list-delete-modal-cancel"
+            >
               Cancel
             </Button>
-            <Button type="button" variant="destructive" onClick={handleDeleteConfirm} disabled={isDeleting}>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              data-test-id="consumed-products-list-delete-modal-confirm"
+            >
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>

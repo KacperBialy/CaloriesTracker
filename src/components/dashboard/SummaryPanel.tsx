@@ -16,17 +16,17 @@ export function SummaryPanel({ summary }: SummaryPanelProps): React.ReactNode {
   const goalNotSet = summary.goal === null || summary.goal === 0;
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-2xl mx-auto" data-test-id="summary-panel">
       <CardHeader>
         <CardTitle>Today&apos;s Summary</CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-6">
         {/* Calories Section */}
-        <div>
+        <div data-test-id="summary-panel-calories">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium">Calories</span>
-            <span className="text-sm font-semibold">
+            <span className="text-sm font-semibold" data-test-id="summary-panel-calories-value">
               {Math.round(summary.calories)}
               {!goalNotSet && ` / ${summary.goal}`}
               {goalNotSet && " kcal"}
@@ -36,16 +36,20 @@ export function SummaryPanel({ summary }: SummaryPanelProps): React.ReactNode {
           {!goalNotSet ? (
             <>
               {/* Progress Bar */}
-              <Progress value={summary.progress ?? 0} className="h-3" />
-              <p className="text-xs text-muted-foreground mt-2">{Math.round(summary.progress ?? 0)}% of daily goal</p>
+              <Progress value={summary.progress ?? 0} className="h-3" data-test-id="summary-panel-progress" />
+              <p className="text-xs text-muted-foreground mt-2" data-test-id="summary-panel-progress-text">
+                {Math.round(summary.progress ?? 0)}% of daily goal
+              </p>
             </>
           ) : (
-            <p className="text-xs text-muted-foreground italic">Goal not set</p>
+            <p className="text-xs text-muted-foreground italic" data-test-id="summary-panel-goal-not-set">
+              Goal not set
+            </p>
           )}
         </div>
 
         {/* Macronutrients Section */}
-        <div className="border-t pt-6">
+        <div className="border-t pt-6" data-test-id="summary-panel-macronutrients">
           <h3 className="text-sm font-medium mb-4">Macronutrients</h3>
           <NutrientStats protein={summary.protein} fat={summary.fat} carbs={summary.carbs} />
         </div>

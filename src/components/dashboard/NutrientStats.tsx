@@ -19,12 +19,14 @@ export function NutrientStats({ protein, fat, carbs }: NutrientStatsProps): Reac
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 gap-4" data-test-id="nutrient-stats">
       {nutrients.map(({ name, value, unit, color }) => (
-        <Card key={name} className="text-center">
+        <Card key={name} className="text-center" data-test-id={`nutrient-stats-${name.toLowerCase()}`}>
           <CardContent className="pt-6">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">{name}</p>
-            <p className={`text-2xl font-bold ${color}`}>{Math.round(value)}</p>
+            <p className={`text-2xl font-bold ${color}`} data-test-id={`nutrient-stats-${name.toLowerCase()}-value`}>
+              {Math.round(value)}
+            </p>
             <p className="text-xs text-muted-foreground mt-2">{unit}</p>
           </CardContent>
         </Card>

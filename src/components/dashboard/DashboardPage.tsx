@@ -22,10 +22,10 @@ export function DashboardPage(): React.ReactNode {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" data-test-id="dashboard-page">
       <Header isLoading={isLoading} summary={summary} onRefreshNeeded={handleRefreshNeeded} />
 
-      <main className="px-4 py-8">
+      <main className="px-4 py-8" data-test-id="dashboard-page-main">
         <DashboardContent key={refreshTrigger} />
       </main>
     </div>

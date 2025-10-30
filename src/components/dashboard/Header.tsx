@@ -33,7 +33,7 @@ export function Header({ isLoading, summary, onRefreshNeeded }: HeaderProps): Re
 
   return (
     <>
-      <header className="w-full bg-white border-b border-gray-200 shadow-sm">
+      <header className="w-full bg-white border-b border-gray-200 shadow-sm" data-test-id="dashboard-header">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           {/* Left: Title */}
           <h1 className="text-2xl font-bold text-gray-900">Calories Tracker</h1>
@@ -46,6 +46,7 @@ export function Header({ isLoading, summary, onRefreshNeeded }: HeaderProps): Re
                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-700 text-sm"
                 role="alert"
                 aria-live="polite"
+                data-test-id="dashboard-header-auth-error"
               >
                 <AlertCircle size={16} />
                 <span>{authError}</span>
@@ -59,6 +60,7 @@ export function Header({ isLoading, summary, onRefreshNeeded }: HeaderProps): Re
               aria-label="Open settings"
               title="Settings"
               className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+              data-test-id="dashboard-header-settings-button"
             >
               <Settings size={20} />
             </button>
@@ -70,6 +72,7 @@ export function Header({ isLoading, summary, onRefreshNeeded }: HeaderProps): Re
               aria-label="Logout"
               title="Logout"
               className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+              data-test-id="dashboard-header-logout-button"
             >
               <LogOut size={20} />
             </button>
