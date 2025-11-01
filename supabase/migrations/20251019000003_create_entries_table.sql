@@ -28,41 +28,21 @@ alter table entries enable row level security;
 
 -- RLS policies for entries
 
--- deny select for anon role
-create policy "select_entries_anon" on entries
-  for select to anon
-  using (false);
-
 -- allow select for authenticated users on own records
 create policy "select_entries_authenticated" on entries
   for select to authenticated
   using (user_id = auth.uid());
-
--- deny insert for anon role
-create policy "insert_entries_anon" on entries
-  for insert to anon
-  with check (false);
 
 -- allow insert for authenticated users when user_id matches
 create policy "insert_entries_authenticated" on entries
   for insert to authenticated
   with check (user_id = auth.uid());
 
--- deny update for anon role
-create policy "update_entries_anon" on entries
-  for update to anon
-  using (false);
-
 -- allow update for authenticated users on own records
 create policy "update_entries_authenticated" on entries
   for update to authenticated
   using (user_id = auth.uid())
   with check (user_id = auth.uid());
-
--- deny delete for anon role
-create policy "delete_entries_anon" on entries
-  for delete to anon
-  using (false);
 
 -- allow delete for authenticated users on own records
 create policy "delete_entries_authenticated" on entries

@@ -18,41 +18,21 @@ alter table user_goals enable row level security;
 
 -- RLS policies for user_goals
 
--- deny select for anon role
-create policy "select_goals_anon" on user_goals
-  for select to anon
-  using (false);
-
 -- allow select for authenticated users on own goal
 create policy "select_goals_authenticated" on user_goals
   for select to authenticated
   using (user_id = auth.uid());
-
--- deny insert for anon role
-create policy "insert_goals_anon" on user_goals
-  for insert to anon
-  with check (false);
 
 -- allow insert for authenticated users when user_id matches
 create policy "insert_goals_authenticated" on user_goals
   for insert to authenticated
   with check (user_id = auth.uid());
 
--- deny update for anon role
-create policy "update_goals_anon" on user_goals
-  for update to anon
-  using (false);
-
 -- allow update for authenticated users on own goal
 create policy "update_goals_authenticated" on user_goals
   for update to authenticated
   using (user_id = auth.uid())
   with check (user_id = auth.uid());
-
--- deny delete for anon role
-create policy "delete_goals_anon" on user_goals
-  for delete to anon
-  using (false);
 
 -- allow delete for authenticated users on own goal
 create policy "delete_goals_authenticated" on user_goals
