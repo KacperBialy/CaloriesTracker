@@ -123,11 +123,17 @@ test.describe("Authentication Flow", () => {
     const authPage = new AuthPage(page);
     await authPage.goto();
 
-    // Note: This test requires valid credentials
-    // In a real scenario, you'd use test fixtures or API helpers to create test users
-    // await authPage.signIn("test@example.com", "password123");
-    // await authPage.waitForDashboardRedirect();
-    // await expect(page).toHaveURL(/\/dashboard/);
+    // Use environment variables for test credentials
+    const username = process.env.E2E_USERNAME;
+    const password = process.env.E2E_PASSWORD;
+
+    if (!username || !password) {
+      throw new Error("E2E_USERNAME or E2E_PASSWORD is not set");
+    }
+
+    await authPage.signIn(username, password);
+    await authPage.waitForDashboardRedirect();
+    await expect(page).toHaveURL(/\/dashboard/);
   });
 
   test("should redirect to login when accessing dashboard without auth", async ({ page }) => {

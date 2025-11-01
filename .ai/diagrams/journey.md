@@ -1,4 +1,3 @@
-
 # User Journey - Authentication Module
 
 ## Overview
@@ -14,11 +13,11 @@ stateDiagram-v2
 
 state "Authentication" as Authentication {
   [*] --> HomePage
-  
+
   HomePage --> RegistrationForm: Click Sign Up
   HomePage --> LoginForm: Click Sign In
   HomePage --> [*]
-  
+
   state "Registration Process" as RegistrationProcess {
     [*] --> RegistrationForm
     RegistrationForm --> RegistrationValidation: Submit Form
@@ -33,7 +32,7 @@ state "Authentication" as Authentication {
     EmailExpired --> RegistrationForm: Start Over
     RegistrationSuccess --> [*]
   }
-  
+
   state "Login Process" as LoginProcess {
     [*] --> LoginForm
     LoginForm --> CredentialsValidation: Submit Credentials
@@ -43,7 +42,7 @@ state "Authentication" as Authentication {
     LoginError --> LoginForm: Retry
     SessionCreated --> [*]
   }
-  
+
   state "Password Recovery" as PasswordRecovery {
     [*] --> ForgotPasswordModal
     ForgotPasswordModal --> EmailEntry: Request Password Reset
@@ -58,7 +57,7 @@ state "Authentication" as Authentication {
     PasswordSubmission --> PasswordUpdated: Update Successful
     PasswordUpdated --> [*]
   }
-  
+
   RegistrationProcess --> LoginForm: Registration Complete
   PasswordRecovery --> LoginForm: Password Reset Complete
 }
@@ -68,7 +67,7 @@ state "Application" as Application {
   LoginForm --> if_user_auth <<choice>>: Try Login
   if_user_auth --> Dashboard: Authenticated
   if_user_auth --> LoginError: Failed
-  
+
   Dashboard --> Dashboard: Use Application
   Dashboard --> LogoutAction: Click Logout
   LogoutAction --> LogoutConfirm: Confirm Logout
@@ -79,7 +78,7 @@ state "Route Protection" as RouteProtection {
   HomePage --> if_has_session <<choice>>: User Visits /
   if_has_session --> Dashboard: Session Active
   if_has_session --> HomePage: No Session
-  
+
   Dashboard --> if_dashboard_auth <<choice>>: User Visits /dashboard
   if_dashboard_auth --> Dashboard: Authenticated
   if_dashboard_auth --> HomePage: Not Authenticated
@@ -115,3 +114,4 @@ end note
 Dashboard --> [*]
 HomePage --> [*]
 
+```

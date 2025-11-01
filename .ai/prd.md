@@ -125,7 +125,6 @@ CaloriesTracker addresses this problem by offering a "hands-free" solution. Usin
   3. After deleting a product, the daily summary of calories and macronutrients is immediately recalculated.
   4. User can delete and object only when it's created by him (US-001).
 
-
 ### US-007
 
 - Title: Logging out of the application

@@ -33,7 +33,7 @@ test("should sign in successfully", async ({ page }) => {
   await authPage.goto();
   await authPage.signIn("user@example.com", "password123");
   await authPage.waitForDashboardRedirect();
-  
+
   expect(page.url()).toContain("/dashboard");
 });
 ```
@@ -47,10 +47,10 @@ test("should update daily calorie goal", async ({ page }) => {
   const dashboardPage = new DashboardPage(page);
   await dashboardPage.goto();
   await dashboardPage.waitForDashboardLoad();
-  
+
   await dashboardPage.openSettings();
   await dashboardPage.setDailyGoal(2000);
-  
+
   // Verify goal was set
   const isGoalSet = await dashboardPage.isGoalSet();
   expect(isGoalSet).toBe(true);
@@ -118,4 +118,3 @@ export class NewPage extends BasePage {
   }
 }
 ```
-

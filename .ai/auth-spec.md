@@ -3,6 +3,7 @@
 This document outlines the technical architecture for the authentication module of the CaloriesTracker application. It covers user registration, login, logout, and password recovery functionalities, aligning with product requirements `US-001` and `US-007` from `prd.md`.
 
 The architecture is designed for the following tech stack:
+
 - Astro 5 (in SSR mode)
 - React 19
 - TypeScript 5
@@ -114,7 +115,7 @@ A single dynamic API route will handle all authentication actions.
   3. Fetches the current user session.
   4. **Route Protection**:
      - If the user is trying to access a protected path (e.g., `/dashboard/*`) and has no session, redirect to `/`.
-     - If the user is on a public auth path (e.g., `/`) and *has* a session, redirect to `/dashboard`.
+     - If the user is on a public auth path (e.g., `/`) and _has_ a session, redirect to `/dashboard`.
   5. Passes user session data to pages via `context.locals` for use in server-side rendering logic.
 
 ### 2.4. Data Validation
@@ -142,4 +143,4 @@ A single dynamic API route will handle all authentication actions.
 The following environment variables must be configured in a `.env` file:
 
 - `SUPABASE_URL`: The URL of the Supabase project.
-- `SUPABASE_ANON_KEY`: The public anonymous key for the Supabase project. 
+- `SUPABASE_ANON_KEY`: The public anonymous key for the Supabase project.
