@@ -57,17 +57,20 @@ test.describe("Dashboard", () => {
     });
 
     test("should update daily calorie goal", async ({ page }) => {
+      const randomGoal = Math.floor(Math.random() * 2000 + 3000).toString();
+
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
 
       await dashboardPage.openSettings();
-      await dashboardPage.settingsModalGoalInput.fill("2000");
+      await dashboardPage.settingsModalGoalInput.fill(randomGoal);
       await dashboardPage.settingsModalSave.click();
       await page.waitForTimeout(1000);
 
       // Modal should close after successful save
       await expect(dashboardPage.settingsModal).not.toBeVisible();
+      await expect(dashboardPage.summaryPanelCaloriesValue).toContainText(randomGoal);
     });
 
     test("should logout successfully", async ({ page }) => {
