@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { DashboardPage } from "./pages/DashboardPage";
+import { signInWithEnv } from "./helpers/auth";
 
 test.describe("Dashboard", () => {
   test.beforeEach(async ({ page }) => {
@@ -20,11 +21,11 @@ test.describe("Dashboard", () => {
   });
 
   test.describe("Authenticated Dashboard", () => {
-    // These tests require authentication
-    // In a real scenario, you'd use test fixtures to set up authenticated sessions
+    test.beforeEach(async ({ page }) => {
+      await signInWithEnv(page);
+    });
 
-    test.skip("should display dashboard header", async ({ page }) => {
-      // Skip until authentication fixtures are set up
+    test("should display dashboard header", async ({ page }) => {
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
 
@@ -33,7 +34,7 @@ test.describe("Dashboard", () => {
       await expect(dashboardPage.headerLogoutButton).toBeVisible();
     });
 
-    test.skip("should display summary panel when data loads", async ({ page }) => {
+    test("should display summary panel when data loads", async ({ page }) => {
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
@@ -42,7 +43,7 @@ test.describe("Dashboard", () => {
       await expect(dashboardPage.summaryPanelCalories).toBeVisible();
     });
 
-    test.skip("should open and close settings modal", async ({ page }) => {
+    test("should open and close settings modal", async ({ page }) => {
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
@@ -55,7 +56,7 @@ test.describe("Dashboard", () => {
       await expect(dashboardPage.settingsModal).not.toBeVisible();
     });
 
-    test.skip("should update daily calorie goal", async ({ page }) => {
+    test("should update daily calorie goal", async ({ page }) => {
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
@@ -69,7 +70,7 @@ test.describe("Dashboard", () => {
       await expect(dashboardPage.settingsModal).not.toBeVisible();
     });
 
-    test.skip("should logout successfully", async ({ page }) => {
+    test("should logout successfully", async ({ page }) => {
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
@@ -78,7 +79,7 @@ test.describe("Dashboard", () => {
       await expect(page).toHaveURL("/");
     });
 
-    test.skip("should refresh dashboard data", async ({ page }) => {
+    test("should refresh dashboard data", async ({ page }) => {
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
@@ -88,7 +89,7 @@ test.describe("Dashboard", () => {
       await expect(page).toHaveURL(/\/dashboard/);
     });
 
-    test.skip("should display consumed products list", async ({ page }) => {
+    test("should display consumed products list", async ({ page }) => {
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
@@ -101,19 +102,6 @@ test.describe("Dashboard", () => {
 
       // At least one state should be true
       expect(isVisible || isLoading || isEmpty || hasError).toBeTruthy();
-    });
-  });
-});
-
-test.describe("Dashboard Visual Regression", () => {
-  test.skip("should match dashboard screenshot", async ({ page }) => {
-    const dashboardPage = new DashboardPage(page);
-    await dashboardPage.goto();
-    await dashboardPage.waitForDashboardLoad();
-
-    // Take screenshot for visual comparison
-    await expect(page).toHaveScreenshot("dashboard.png", {
-      fullPage: true,
     });
   });
 });

@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { AuthPage } from "./pages/AuthPage";
-import { DashboardPage } from "./pages/DashboardPage";
 
 test.describe("Homepage", () => {
   test("should load the homepage with auth form", async ({ page }) => {
@@ -44,7 +43,7 @@ test.describe("Authentication Flow", () => {
     await page.goto("/dashboard");
 
     // Wait for redirect
-    await page.waitForURL("/", { timeout: 5000 }).catch(() => {});
+    await page.waitForURL("/", { timeout: 5000 });
 
     // Verify auth form is displayed
     const authPage = new AuthPage(page);

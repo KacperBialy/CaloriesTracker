@@ -12,29 +12,29 @@ export async function signIn(page: Page, email: string, password: string): Promi
 }
 
 /**
+ * Helper function to sign in with environment variable credentials
+ * Clears cookies and logs in using E2E_USERNAME and E2E_PASSWORD
+ */
+export async function signInWithEnv(page: Page): Promise<void> {
+  // Clear any existing authentication state
+  await page.context().clearCookies();
+
+  // Use environment variables for test credentials
+  const username = process.env.E2E_USERNAME;
+  const password = process.env.E2E_PASSWORD;
+
+  if (!username || !password) {
+    throw new Error("E2E_USERNAME or E2E_PASSWORD is not set");
+  }
+
+  await signIn(page, username, password);
+}
+
+/**
  * Helper function to sign out a user using Page Object Model
  */
 export async function signOut(page: Page): Promise<void> {
   const dashboardPage = new DashboardPage(page);
   await dashboardPage.goto();
   await dashboardPage.logout();
-}
-
-/**
- * Helper function to create a test user via API
- * Use this in beforeAll hooks to set up test data
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function createTestUser(email: string, password: string): Promise<void> {
-  // Implement user creation via API
-  // This should use your backend API to create a test user
-  // Example:
-  // const response = await fetch('http://localhost:4321/api/auth/register', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({ email, password }),
-  // });
-  // if (!response.ok) {
-  //   throw new Error(`Failed to create test user: ${await response.text()}`);
-  // }
 }
