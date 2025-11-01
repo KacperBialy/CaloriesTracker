@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { EntryIdParamSchema } from "../../../types";
 import { EntryService } from "../../../lib/services/EntryService";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -41,26 +40,8 @@ export const DELETE: APIRoute = async (context) => {
       );
     }
 
-    // Step 3: Get user ID (from authenticated session)
-    // Currently using DEFAULT_USER_ID for development
-    const userId = DEFAULT_USER_ID;
-
-    // Guard: Verify user is authenticated
-    if (!userId) {
-      return new Response(
-        JSON.stringify({
-          error: "Unauthorized",
-          message: "User must be authenticated to access this resource",
-        }),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
     // Guard: Verify supabase client is available
-    if (!context.locals.supabase) {
+    if (!context.locals.supabase || !context.locals.user) {
       return new Response(
         JSON.stringify({
           error: "Internal Server Error",
@@ -75,7 +56,7 @@ export const DELETE: APIRoute = async (context) => {
 
     // Step 4: Call EntryService to delete entry
     const service = new EntryService(context.locals.supabase);
-    const deleteResult = await service.deleteEntry(userId, validationResult.data.entryId);
+    const deleteResult = await service.deleteEntry(context.locals.user.id, validationResult.data.entryId);
 
     // Step 5: Handle deletion results and return appropriate response
     if (!deleteResult.success) {
@@ -114,8 +95,6 @@ export const DELETE: APIRoute = async (context) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    // Unexpected server error
-    console.error("Error deleting entry:", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",

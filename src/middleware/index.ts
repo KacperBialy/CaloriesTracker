@@ -1,24 +1,10 @@
 import { defineMiddleware } from "astro:middleware";
 import { createSupabaseServerInstance } from "../db/supabase.client";
 
-const PUBLIC_PATHS = ["/", "/update-password", "/api/auth/login", "/api/auth/register", "/api/auth/forgot-password"];
+const PUBLIC_PATHS = ["/update-password", "/api/auth/login", "/api/auth/register", "/api/auth/forgot-password"];
 
 export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
   if (PUBLIC_PATHS.includes(url.pathname)) {
-    if (url.pathname === "/") {
-      const supabase = createSupabaseServerInstance({
-        cookies,
-        headers: request.headers,
-      });
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (user) {
-        return redirect("/dashboard");
-      }
-    }
-
     return next();
   }
 
@@ -39,7 +25,7 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
       id: user.id,
     };
   } else {
-    return redirect("/");
+    return new Response(null, { status: 401 });
   }
 
   return next();
