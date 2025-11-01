@@ -1,5 +1,6 @@
 import path from "path";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
 import { defineConfig, devices } from "@playwright/test";
 
 /**
@@ -17,6 +18,9 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [["html"], ["list"], ["json", { outputFile: "test-results/results.json" }]],
+  /* Global setup and teardown */
+  globalSetup: fileURLToPath(import.meta.resolve("./e2e/global.setup.ts")),
+  globalTeardown: fileURLToPath(import.meta.resolve("./e2e/global.teardown.ts")),
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */

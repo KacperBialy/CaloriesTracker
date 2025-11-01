@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { DashboardPage } from "./pages/DashboardPage";
 import { signInWithEnv } from "./helpers/auth";
+import { SEEDED_PRODUCTS, getExpectedTotalCalories, getExpectedMacronutrients } from "./helpers/testData";
 
 test.describe("Dashboard", () => {
   test.beforeEach(async ({ page }) => {
@@ -105,6 +106,53 @@ test.describe("Dashboard", () => {
 
       // At least one state should be true
       expect(isVisible || isLoading || isEmpty || hasError).toBeTruthy();
+    });
+
+    test("should display seeded products in the consumed products list", async ({ page }) => {
+      const dashboardPage = new DashboardPage(page);
+      await dashboardPage.goto();
+      await dashboardPage.waitForDashboardLoad();
+
+      // Wait for consumed products list to be visible
+      await expect(dashboardPage.consumedProductsListTableContainer).toBeVisible({ timeout: 10000 });
+
+      // Check if seeded products are visible by name
+      for (const product of SEEDED_PRODUCTS) {
+        const productElement = page.locator(`:text("${product.name}")`);
+        await expect(productElement).toBeVisible({ timeout: 5000 });
+      }
+    });
+
+    test("should calculate correct calories from seeded entries", async ({ page }) => {
+      const dashboardPage = new DashboardPage(page);
+      await dashboardPage.goto();
+      await dashboardPage.waitForDashboardLoad();
+
+      // Wait for summary panel to load
+      await expect(dashboardPage.summaryPanelCalories).toBeVisible({ timeout: 10000 });
+
+      const expectedCalories = getExpectedTotalCalories();
+      const caloriesText = await dashboardPage.summaryPanelCaloriesValue.textContent();
+      expect(caloriesText).toContain(expectedCalories.toString());
+    });
+
+    test("should display correct macronutrient values from seeded entries", async ({ page }) => {
+      const dashboardPage = new DashboardPage(page);
+      await dashboardPage.goto();
+      await dashboardPage.waitForDashboardLoad();
+
+      // Wait for nutrient stats to load
+      await expect(dashboardPage.nutrientStats).toBeVisible({ timeout: 10000 });
+
+      const expectedMacros = getExpectedMacronutrients();
+
+      const proteinValue = await dashboardPage.getNutrientValue("protein");
+      const fatValue = await dashboardPage.getNutrientValue("fat");
+      const carbsValue = await dashboardPage.getNutrientValue("carbs");
+
+      expect(proteinValue).toBe(expectedMacros.protein);
+      expect(fatValue).toBe(expectedMacros.fat);
+      expect(carbsValue).toBe(expectedMacros.carbs);
     });
   });
 });
