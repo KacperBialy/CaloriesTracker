@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Alert } from "../ui/alert";
+import { validateEmail, validateEmailField } from "../../lib/validation/auth";
 
 type FormErrors = Record<string, string>;
 
 interface SignInFormProps {
   onError?: (error: string) => void;
 }
-
-const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
 export const SignInForm: React.FC<SignInFormProps> = ({ onError }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,10 +22,9 @@ export const SignInForm: React.FC<SignInFormProps> = ({ onError }) => {
 
     const errors: FormErrors = {};
 
-    if (!email) {
-      errors.email = "Email is required";
-    } else if (!validateEmail(email)) {
-      errors.email = "Invalid email format";
+    const emailError = validateEmailField(email);
+    if (emailError) {
+      errors.email = emailError;
     }
 
     if (!password) {

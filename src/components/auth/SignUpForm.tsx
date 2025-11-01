@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Alert } from "../ui/alert";
+import { validateEmailField, validatePasswordField, validateConfirmPasswordField } from "../../lib/validation/auth";
 
 type FormErrors = Record<string, string>;
 
 interface SignUpFormProps {
   onError?: (error: string) => void;
 }
-
-const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-const validatePassword = (password: string): boolean => {
-  return password.length >= 8;
-};
-
 export const SignUpForm: React.FC<SignUpFormProps> = ({ onError }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,22 +25,19 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onError }) => {
 
     const errors: FormErrors = {};
 
-    if (!email) {
-      errors.email = "Email is required";
-    } else if (!validateEmail(email)) {
-      errors.email = "Invalid email format";
+    const emailError = validateEmailField(email);
+    if (emailError) {
+      errors.email = emailError;
     }
 
-    if (!password) {
-      errors.password = "Password is required";
-    } else if (!validatePassword(password)) {
-      errors.password = "Password must be at least 8 characters";
+    const passwordError = validatePasswordField(password);
+    if (passwordError) {
+      errors.password = passwordError;
     }
 
-    if (!confirmPassword) {
-      errors.confirmPassword = "Confirm password is required";
-    } else if (password !== confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
+    const confirmPasswordError = validateConfirmPasswordField(password, confirmPassword);
+    if (confirmPasswordError) {
+      errors.confirmPassword = confirmPasswordError;
     }
 
     if (Object.keys(errors).length > 0) {
