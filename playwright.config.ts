@@ -43,10 +43,10 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "npm run dev:e2e",
+    command: "npm run dev -- --port 4321",
     url: "http://localhost:4321",
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 12 * 1000,
   },
 });
 
