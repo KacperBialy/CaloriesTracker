@@ -3,7 +3,7 @@ import { createSupabaseServerInstance } from "../db/supabase.client";
 
 const PUBLIC_PATHS = ["/update-password", "/api/auth/login", "/api/auth/register", "/api/auth/forgot-password"];
 
-export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
+export const onRequest = defineMiddleware(async ({ locals, cookies, url, request }, next) => {
   if (PUBLIC_PATHS.includes(url.pathname)) {
     return next();
   }

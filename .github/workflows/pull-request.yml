@@ -109,7 +109,7 @@ jobs:
             Unit test coverage report and Playwright report are available as artifacts.
 
       - name: Post status comment on failure
-        if: needs.unit-test.result == 'failure' || needs.e2e-test.result == 'failure'
+        if: needs.lint.result == 'failure' || needs.unit-test.result == 'failure' || needs.e2e-test.result == 'failure'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
