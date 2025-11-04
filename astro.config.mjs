@@ -17,4 +17,7 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
+  devToolbar: {
+    enabled: import.meta.env.MODE !== "test" && !import.meta.env.E2E_TEST,
+  },
 });
