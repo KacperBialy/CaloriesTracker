@@ -1,4 +1,5 @@
 import type { Page, Locator } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 /**
@@ -183,6 +184,9 @@ export class DashboardPage extends BasePage {
    * Refresh dashboard data
    */
   async refresh(): Promise<void> {
+    // Wait for refresh button to be visible and enabled before clicking
+    await this.dashboardRefreshButton.waitFor({ state: "visible", timeout: 10000 });
+    await expect(this.dashboardRefreshButton).toBeEnabled();
     await this.dashboardRefreshButton.click();
     await this.waitForDashboardLoad();
   }

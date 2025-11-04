@@ -79,7 +79,14 @@ test.describe("Dashboard", () => {
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
 
+      // Ensure we're on dashboard before refresh
+      await expect(page).toHaveURL(/\/dashboard/);
+
       await dashboardPage.refresh();
+
+      // Wait a bit for any potential navigation to complete
+      await page.waitForTimeout(500);
+
       // Should still be on dashboard after refresh
       await expect(page).toHaveURL(/\/dashboard/);
     });
