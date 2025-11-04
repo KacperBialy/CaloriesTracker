@@ -1,0 +1,7 @@
+name = "caloriestracker"
+type = "javascript"
+main = "src/index.ts"
+compatibility_date = "2025-11-04"
+
+[env.production]
+name = "caloriestracker"
