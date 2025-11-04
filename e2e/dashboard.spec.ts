@@ -74,21 +74,19 @@ test.describe("Dashboard", () => {
       await expect(dashboardPage.summaryPanelCaloriesValue).toContainText(randomGoal);
     });
 
-    test("should logout successfully", async ({ page }) => {
-      const dashboardPage = new DashboardPage(page);
-      await dashboardPage.goto();
-      await dashboardPage.waitForDashboardLoad();
-
-      await dashboardPage.logout();
-      await expect(page).toHaveURL("/");
-    });
-
     test("should refresh dashboard data", async ({ page }) => {
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
 
+      // Ensure we're on dashboard before refresh
+      await expect(page).toHaveURL(/\/dashboard/);
+
       await dashboardPage.refresh();
+
+      // Wait a bit for any potential navigation to complete
+      await page.waitForTimeout(500);
+
       // Should still be on dashboard after refresh
       await expect(page).toHaveURL(/\/dashboard/);
     });
@@ -154,5 +152,17 @@ test.describe("Dashboard", () => {
       expect(fatValue).toBe(expectedMacros.fat);
       expect(carbsValue).toBe(expectedMacros.carbs);
     });
+  });
+
+  test("should logout successfully", async ({ page }) => {
+    // Login first
+    await signInWithEnv(page);
+
+    const dashboardPage = new DashboardPage(page);
+    await dashboardPage.goto();
+    await dashboardPage.waitForDashboardLoad();
+
+    await dashboardPage.logout();
+    await expect(page).toHaveURL("/");
   });
 });
