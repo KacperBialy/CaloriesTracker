@@ -88,7 +88,7 @@ The scope of the project is defined for the Minimum Viable Product (MVP).
 
 ### In Scope for MVP
 
-- **Authentication**: User login and registration exclusively through Google OAuth2.
+- **Authentication**: User login and password.
 - **Data Entry**: Processing meal queries sent to the API in text form.
 - **Data Retrieval**: Automatic retrieval of nutritional data for recognized products.
 - **Database**: Saving each product as a separate entry associated with the user.
