@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import process from "node:process";
 
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
@@ -17,7 +18,8 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
+  // Disable dev toolbar when E2E_TEST environment variable is set (used by Playwright tests)
   devToolbar: {
-    enabled: import.meta.env.MODE !== "test" && !import.meta.env.E2E_TEST,
+    enabled: !process.env.E2E_TEST,
   },
 });
