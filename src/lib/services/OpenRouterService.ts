@@ -1,5 +1,4 @@
-import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
+import { OPENROUTER_API_KEY } from "astro:env/server";
 import type { ChatCompletionParams, ChatCompletionResponse } from "@/types";
 import {
   ConfigurationError,
@@ -11,14 +10,9 @@ import {
   NetworkError,
   ResponseParsingError,
 } from "./errors";
+import type { ZodType, ZodTypeDef } from "astro:schema";
 
 /**
- * Configuration validation schema for environment variables
- */
-const envSchema = z.object({
-  OPENROUTER_API_KEY: z.string().min(1, "OPENROUTER_API_KEY is required"),
-});
-
 // ============================================================================
 // Custom Error Classes removed - see ./errors.ts for definitions
 // ============================================================================
@@ -53,23 +47,11 @@ const envSchema = z.object({
  * ```
  */
 export class OpenRouterService {
-  private readonly apiKey: string;
   private readonly defaultModel = "openai/gpt-4o-mini";
   private readonly defaultTemperature = 0.7;
   private readonly defaultMaxTokens = 2048;
   private readonly apiUrl = "https://openrouter.ai/api/v1/chat/completions";
   private readonly requestTimeout = 30000; // 30 seconds
-
-  constructor() {
-    // Validate configuration early to fail fast
-    const parsedEnv = envSchema.safeParse(import.meta.env);
-    if (!parsedEnv.success) {
-      const issues = parsedEnv.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`).join("; ");
-      throw new ConfigurationError(`Invalid environment configuration: ${issues}`);
-    }
-
-    this.apiKey = parsedEnv.data.OPENROUTER_API_KEY;
-  }
 
   /**
    * Sends a chat completion request to OpenRouter and returns a parsed response
@@ -188,7 +170,7 @@ export class OpenRouterService {
         const response = await fetch(this.apiUrl, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${this.apiKey}`,
+            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
@@ -391,3 +373,6 @@ export {
   NetworkError,
   ResponseParsingError,
 } from "./errors";
+function zodToJsonSchema(jsonSchema: ZodType<unknown, ZodTypeDef, unknown>) {
+  throw new Error("Function not implemented.");
+}
