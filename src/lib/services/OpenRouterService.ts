@@ -10,7 +10,6 @@ import {
   NetworkError,
   ResponseParsingError,
 } from "./errors";
-import type { ZodType, ZodTypeDef } from "astro:schema";
 
 /**
 // ============================================================================
@@ -134,7 +133,7 @@ export class OpenRouterService {
 
     // Configure JSON schema if provided
     if (params.jsonSchema) {
-      const schema = "parse" in params.jsonSchema ? zodToJsonSchema(params.jsonSchema) : params.jsonSchema;
+      const schema = params.jsonSchema;
 
       body.response_format = {
         type: "json_schema",
@@ -360,19 +359,4 @@ export class OpenRouterService {
       },
     };
   }
-}
-
-// Re-export error classes for convenience
-export {
-  ConfigurationError,
-  ApiError,
-  ApiAuthenticationError,
-  ApiBadRequestError,
-  ApiRateLimitError,
-  ApiServerError,
-  NetworkError,
-  ResponseParsingError,
-} from "./errors";
-function zodToJsonSchema(jsonSchema: ZodType<unknown, ZodTypeDef, unknown>) {
-  throw new Error("Function not implemented.");
 }
