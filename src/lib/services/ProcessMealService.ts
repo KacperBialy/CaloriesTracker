@@ -2,7 +2,8 @@ import { z } from "zod";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../../db/database.types";
 import type { EntryDto, ErrorDto, NutritionDto, ProductEntity, ProductInsert } from "../../types";
-import { OpenRouterService, ResponseParsingError } from "./OpenRouterService";
+import { OpenRouterService } from "./OpenRouterService";
+import { ResponseParsingError } from "./errors";
 
 /**
  * Represents a single parsed meal item (output from LLM parsing)
