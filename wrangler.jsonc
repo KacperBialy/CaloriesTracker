@@ -1,7 +1,7 @@
 {
   "main": "dist/_worker.js/index.js",
   "name": "caloriestracker",
-  "compatibility_date": "2025-11-04",
+  "compatibility_date": "2025-11-06",
   "compatibility_flags": [
     "nodejs_compat",
     "global_fetch_strictly_public"
