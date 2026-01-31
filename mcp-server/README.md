@@ -18,21 +18,25 @@ mcp-server/
 ## Setup
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Set environment variables:
+
 ```bash
 export ASTRO_API_URL=https://your-astro-app.com
 ```
 
 3. Build the project:
+
 ```bash
 npm run build
 ```
 
 4. Run the server:
+
 ```bash
 npm start
 ```
@@ -40,9 +44,11 @@ npm start
 ## Tools
 
 ### processProducts
+
 Processes a natural language string describing a meal, identifies food items, and logs them for the authenticated user.
 
 **Input:**
+
 ```json
 {
   "text": "chicken 200g and rice 100g"
@@ -50,6 +56,7 @@ Processes a natural language string describing a meal, identifies food items, an
 ```
 
 **Output:**
+
 ```json
 {
   "successes": [...],
@@ -58,11 +65,13 @@ Processes a natural language string describing a meal, identifies food items, an
 ```
 
 ### getDailySummary
+
 Retrieves the authenticated user's aggregated nutritional summary for the current day.
 
 **Input:** `{}` (empty object)
 
 **Output:**
+
 ```json
 {
   "calories": 1500,
@@ -82,7 +91,7 @@ The server requires a Supabase JWT token to be passed with each request. The tok
 ## Development
 
 Run in development mode with auto-reload:
+
 ```bash
 npm run dev
 ```
-
