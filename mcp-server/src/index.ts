@@ -12,9 +12,11 @@ import { ProcessMealCommandSchema, EmptyInputSchema } from "./types.js";
 class CaloriesTrackerMCPServer {
   private server: Server;
   private astroApiUrl: string;
+  private apiKey: string;
 
-  constructor(astroApiUrl: string) {
+  constructor(astroApiUrl: string, apiKey: string) {
     this.astroApiUrl = astroApiUrl;
+    this.apiKey = apiKey;
     this.server = new Server(
       {
         name: "calories-tracker-mcp-server",
@@ -65,18 +67,9 @@ class CaloriesTrackerMCPServer {
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
 
-      // Extract Supabase JWT from request context
-      // Note: In a real implementation, this would come from the MCP client's context
-      // For now, we'll need to handle this through the transport layer
-      const supabaseToken = this.extractTokenFromContext(request);
-
-      if (!supabaseToken) {
-        throw new Error("Missing Authorization header: Supabase JWT required");
-      }
-
       const astroApiConfig = {
         baseUrl: this.astroApiUrl,
-        supabaseToken,
+        apiKey: this.apiKey,
       };
 
       try {
@@ -161,35 +154,6 @@ class CaloriesTrackerMCPServer {
   }
 
   /**
-   * Extract Supabase JWT token from request context
-   * The token should be passed in the request metadata under 'authorization' or 'supabaseToken'
-   */
-  private extractTokenFromContext(request: any): string | null {
-    // Try to extract from metadata (MCP protocol supports metadata in requests)
-    const metadata = (request as any).meta;
-    if (metadata) {
-      // Check for Authorization header in metadata
-      const authHeader = metadata.authorization || metadata.Authorization;
-      if (authHeader) {
-        // Extract Bearer token if present
-        if (typeof authHeader === "string" && authHeader.startsWith("Bearer ")) {
-          return authHeader.substring(7);
-        }
-        return authHeader;
-      }
-      // Check for direct token in metadata
-      if (metadata.supabaseToken) {
-        return metadata.supabaseToken;
-      }
-    }
-
-    // If using HTTP transport, token would come from Express request headers
-    // This would be handled by Express middleware before reaching the MCP handler
-
-    return null;
-  }
-
-  /**
    * Start the server with stdio transport
    */
   async start(): Promise<void> {
@@ -208,7 +172,12 @@ async function main() {
     throw new Error("ASTRO_API_URL environment variable is required");
   }
 
-  const server = new CaloriesTrackerMCPServer(astroApiUrl);
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    throw new Error("API_KEY environment variable is required");
+  }
+
+  const server = new CaloriesTrackerMCPServer(astroApiUrl, apiKey);
   await server.init();
   await server.start();
 }

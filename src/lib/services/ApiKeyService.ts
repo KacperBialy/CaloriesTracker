@@ -1,7 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../../db/database.types";
 import type { ApiKeyDto } from "../../types";
-import { randomBytes } from "crypto";
 
 /**
  * Service for managing user API keys
@@ -9,14 +8,6 @@ import { randomBytes } from "crypto";
  */
 export class ApiKeyService {
   constructor(private supabase: SupabaseClient<Database>) {}
-
-  /**
-   * Generates a secure random API key
-   * @returns A random API key string
-   */
-  private generateKey(): string {
-    return randomBytes(32).toString("hex");
-  }
 
   /**
    * Retrieves the current API key for a user
@@ -52,15 +43,23 @@ export class ApiKeyService {
     // Delete any existing key for this user
     await this.supabase.from("api_keys").delete().eq("user_id", userId);
 
-    // Generate new key
-    const key = this.generateKey();
+    const {
+      data: { session },
+    } = await this.supabase.auth.getSession();
 
-    // Insert the new key
+    // TODO - this is a hack to get the user access to the API from MCP
+    // right now the "API_KEY" works only during the active session, we should find a better way to do this
+    const jsonData = JSON.stringify({
+      access_token: session?.access_token,
+      refresh_token: session?.refresh_token,
+    });
+    const base64Key = Buffer.from(jsonData, "utf-8").toString("base64");
+
     const { data: apiKey, error } = await this.supabase
       .from("api_keys")
       .insert({
         user_id: userId,
-        key,
+        key: base64Key,
       })
       .select("id, key, created_at")
       .single();

@@ -6,7 +6,7 @@ import { ProcessResponseDtoSchema, DailySummaryDtoSchema } from "./types.js";
  */
 interface AstroApiConfig {
   baseUrl: string;
-  supabaseToken: string;
+  apiKey: string;
 }
 
 /**
@@ -18,7 +18,7 @@ async function fetchAstroApi<T>(endpoint: string, config: AstroApiConfig, option
     ...options,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${config.supabaseToken}`,
+      "Api-Key": config.apiKey,
       ...options.headers,
     },
   });
@@ -67,7 +67,7 @@ export async function executeProcessProducts(
  */
 export async function executeGetDailySummary(astroApiConfig: AstroApiConfig): Promise<DailySummaryDto> {
   try {
-    const response = await fetchAstroApi<DailySummaryDto>("/api/summary/daily", astroApiConfig, {
+    const response = await fetchAstroApi<DailySummaryDto>("/api/summary", astroApiConfig, {
       method: "GET",
     });
 

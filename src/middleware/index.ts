@@ -13,6 +13,17 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
     headers: request.headers,
   });
 
+  // If the request has an authorization and refresh token, set the session
+  if (request.headers.get("API-Key")) {
+    const apiKey = request.headers.get("API-Key");
+    const apiKeyData = Buffer.from(apiKey ?? "", "base64").toString("utf-8");
+    const apiKeyDataJson = JSON.parse(apiKeyData);
+    await supabase.auth.setSession({
+      access_token: apiKeyDataJson.access_token,
+      refresh_token: apiKeyDataJson.refresh_token,
+    });
+  }
+
   locals.supabase = supabase;
 
   const {
