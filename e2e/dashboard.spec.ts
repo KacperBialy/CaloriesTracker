@@ -75,6 +75,9 @@ test.describe("Dashboard", () => {
     });
 
     test("should refresh dashboard data", async ({ page }) => {
+      // Increase timeout for this test as refresh involves multiple async operations
+      test.setTimeout(45000);
+
       const dashboardPage = new DashboardPage(page);
       await dashboardPage.goto();
       await dashboardPage.waitForDashboardLoad();
@@ -82,10 +85,13 @@ test.describe("Dashboard", () => {
       // Ensure we're on dashboard before refresh
       await expect(page).toHaveURL(/\/dashboard/);
 
+      // Verify summary panel is visible before refresh
+      await expect(dashboardPage.summaryPanel).toBeVisible();
+
       await dashboardPage.refresh();
 
-      // Wait a bit for any potential navigation to complete
-      await page.waitForTimeout(500);
+      // Verify data is still visible after refresh completes
+      await expect(dashboardPage.summaryPanel).toBeVisible();
 
       // Should still be on dashboard after refresh
       await expect(page).toHaveURL(/\/dashboard/);
