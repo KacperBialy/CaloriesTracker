@@ -12,6 +12,9 @@ export type ProductUpdate = Database["public"]["Tables"]["products"]["Update"];
 export type UserGoalEntity = Database["public"]["Tables"]["user_goals"]["Row"];
 export type UserGoalInsert = Database["public"]["Tables"]["user_goals"]["Insert"];
 export type UserGoalUpdate = Database["public"]["Tables"]["user_goals"]["Update"];
+export type ApiKeyEntity = Database["public"]["Tables"]["api_keys"]["Row"];
+export type ApiKeyInsert = Database["public"]["Tables"]["api_keys"]["Insert"];
+export type ApiKeyUpdate = Database["public"]["Tables"]["api_keys"]["Update"];
 
 // 1. Command to process free-text meal input
 export interface ProcessMealCommand {
@@ -107,13 +110,29 @@ export interface UpsertUserGoalCommand {
   dailyCalorieGoal: number;
 }
 
-// 13. Aggregated daily summary including goal
+// 13. API Key data transferred via API
+export interface ApiKeyDto {
+  /** API Key ID */
+  apiKeyId: string;
+  /** The actual API key (may be masked in some responses) */
+  key: string;
+  /** When the API key was created */
+  createdAt: string;
+}
+
+// 14. Command to generate a new API key
+export interface GenerateApiKeyCommand {
+  /** Optional description for the API key (for future use) */
+  description?: string;
+}
+
+// 15. Aggregated daily summary including goal
 export type DailySummaryDto = NutritionDto & {
   /** Current user's goal; null if not set */
   goal: number | null;
 };
 
-// 14. View model for dashboard summary display
+// 16. View model for dashboard summary display
 export interface SummaryVM {
   calories: number;
   protein: number;
@@ -124,7 +143,7 @@ export interface SummaryVM {
   progress?: number;
 }
 
-// 15. Custom hook return type for summary fetching
+// 17. Custom hook return type for summary fetching
 export interface UseSummaryHookResult {
   data?: SummaryVM;
   loading: boolean;
@@ -159,6 +178,16 @@ export const UpsertUserGoalCommandSchema = z.object({
 });
 
 export type UpsertUserGoalCommandType = z.infer<typeof UpsertUserGoalCommandSchema>;
+
+/**
+ * Validates GenerateApiKeyCommand input
+ * - description: optional string
+ */
+export const GenerateApiKeyCommandSchema = z.object({
+  description: z.string().optional(),
+});
+
+export type GenerateApiKeyCommandType = z.infer<typeof GenerateApiKeyCommandSchema>;
 
 /**
  * Validates GetEntriesQuery input

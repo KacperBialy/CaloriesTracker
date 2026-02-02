@@ -1,5 +1,6 @@
 import { OPENROUTER_API_KEY } from "astro:env/server";
 import type { ChatCompletionParams, ChatCompletionResponse } from "@/types";
+import { zodToJsonSchema } from "zod-to-json-schema";
 import {
   ConfigurationError,
   ApiError,
@@ -133,14 +134,26 @@ export class OpenRouterService {
 
     // Configure JSON schema if provided
     if (params.jsonSchema) {
-      const schema = params.jsonSchema;
+      // Convert Zod schema to JSON Schema if needed
+      let jsonSchema: Record<string, unknown>;
+
+      if (typeof params.jsonSchema === "object" && params.jsonSchema !== null && "safeParse" in params.jsonSchema) {
+        // It's a Zod schema - convert to JSON Schema
+        jsonSchema = zodToJsonSchema(params.jsonSchema, {
+          target: "openApi3",
+          $refStrategy: "none",
+        }) as Record<string, unknown>;
+      } else {
+        // Assume it's already a JSON Schema
+        jsonSchema = params.jsonSchema as Record<string, unknown>;
+      }
 
       body.response_format = {
         type: "json_schema",
         json_schema: {
           name: "extracted_data",
           strict: true,
-          schema,
+          schema: jsonSchema,
         },
       };
     }

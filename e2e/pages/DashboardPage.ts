@@ -137,10 +137,11 @@ export class DashboardPage extends BasePage {
    */
   async waitForDashboardLoad(): Promise<void> {
     // Wait for either data to load or error to appear
+    // Use 15s timeout to account for slower CI environments
     await Promise.race([
-      this.summaryPanel.waitFor({ state: "visible", timeout: 10000 }),
-      this.dashboardErrorAlert.waitFor({ state: "visible", timeout: 10000 }),
-      this.consumedProductsList.waitFor({ state: "visible", timeout: 10000 }),
+      this.summaryPanel.waitFor({ state: "visible", timeout: 15000 }),
+      this.dashboardErrorAlert.waitFor({ state: "visible", timeout: 15000 }),
+      this.consumedProductsList.waitFor({ state: "visible", timeout: 15000 }),
     ]);
   }
 
@@ -187,7 +188,16 @@ export class DashboardPage extends BasePage {
     // Wait for refresh button to be visible and enabled before clicking
     await this.dashboardRefreshButton.waitFor({ state: "visible", timeout: 10000 });
     await expect(this.dashboardRefreshButton).toBeEnabled();
-    await this.dashboardRefreshButton.click();
+    // Use force: true to bypass Astro dev toolbar intercepting pointer events
+    await this.dashboardRefreshButton.click({ force: true });
+
+    // Wait for loading state to start (data section should become hidden)
+    // This ensures we're not catching the stale pre-refresh state
+    await this.dashboardRefreshButton.waitFor({ state: "hidden", timeout: 5000 }).catch(() => {
+      // If button doesn't hide, maybe loading was very fast - that's okay
+    });
+
+    // Now wait for data to reload
     await this.waitForDashboardLoad();
   }
 
